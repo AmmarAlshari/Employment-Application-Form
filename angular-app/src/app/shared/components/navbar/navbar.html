@@ -1,0 +1,17 @@
+<nav
+  class="bg-white border-b border-gray-100 py-4 px-6 md:px-20 flex justify-between items-center sticky top-0 z-50"
+>
+  <button
+    type="button"
+    (click)="toggleLanguage()"
+    class="text-[13px] font-bold text-blue-900 hover:text-blue-700 transition"
+  >
+    {{ isArabic ? 'English' : 'عربي' }}
+  </button>
+
+  <div class="flex items-center">
+    <a routerLink="/" class="cursor-pointer">
+      <img src="almajdouie-logo.png" alt="Almajdouie Logo" class="h-10 md:h-14 w-auto" />
+    </a>
+  </div>
+</nav>
