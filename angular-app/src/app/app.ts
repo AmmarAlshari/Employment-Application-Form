@@ -10,5 +10,5 @@ import { FooterComponent } from './shared/components/footer/footer';
   styleUrl: './app.css',
 })
 export class App {
-  protected readonly title = signal('angular-app');
+  protected readonly title = signal('Employment Application Form');
 }
