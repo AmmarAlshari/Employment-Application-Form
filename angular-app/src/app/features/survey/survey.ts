@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-survey',
@@ -12,6 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 export class SurveyComponent {
   // Inject the tools we need
   private route = inject(ActivatedRoute);
+  
 
   isArabic = false;
 
@@ -19,59 +20,72 @@ export class SurveyComponent {
     // Logic to detect if the URL is 'IndexAr'
     const path = window.location.pathname;
     this.isArabic = path.includes('Ar');
-
-    // Update the page direction (RTL for Arabic, LTR for English)
-    document.documentElement.dir = this.isArabic ? 'rtl' : 'ltr';
   }
 
   translations: any = {
-  en: {
-    namePlaceholder: 'Enter your full name',
-    idPlaceholder: '10 digits starting with 1 or 2',
-    mobilePlaceholder: '5xxxxxxxx',
-    emailPlaceholder: 'example@mail.com',
-    majorPlaceholder: 'e.g. Computer Science',
-    othersPlaceholder: 'Please specify (e.g. Driver, clerk...)',
-    title: 'Employment Application Form',
-    name: 'Name',
-    nationality: 'Nationality',
-    id: 'National ID',
-    mobile: 'Mobile Number',
-    email: 'Email',
-    gender: 'Gender',
-    qualification: 'Qualification',
-    major: 'Major',
-    male: 'Male',
-    female: 'Female',
-    submit: 'Submit Application',
-    rolesTitle: 'Job Role',
-    rolesSub: 'Which job would you choose?',
-    cvLabel: 'Upload resume (PDF only)'
-  },
-  ar: {
-    namePlaceholder: 'أدخل الاسم الكامل',
-    idPlaceholder: '10 أرقام تبدأ بـ 1 أو 2',
-    mobilePlaceholder: '5xxxxxxxx',
-    emailPlaceholder: 'example@mail.com',
-    majorPlaceholder: 'مثال: علوم حاسب',
-    othersPlaceholder: 'يرجى التحديد (مثال: سائق، كاتب...)',
-    title: 'نموذج طلب التوظيف - المجدوعي',
-    name: 'الاسم',
-    id: 'الهوية الوطنية',
-    mobile: 'رقم الجوال',
-    email: 'البريد الإلكتروني',
-    gender: 'الجنس',
-    male: 'ذكر',
-    major: 'التخصص',
-    nationality: 'الجنسية',
-    qualification: 'المؤهل العلمي',
-    female: 'أنثى',
-    submit: 'إرسال الطلب',
-    rolesTitle: 'المسمى الوظيفي',
-    rolesSub: 'ما هي الوظيفة التي تود اختيارها؟',
-    cvLabel: 'رفع السيرة الذاتية (PDF فقط)'
-  }
-};
+    en: {
+      title: 'Employment Application Form',
+      name: 'Name',
+      nationality: 'Nationality',
+      id: 'National ID',
+      mobile: 'Mobile Number',
+      email: 'Email',
+      gender: 'Gender',
+      qualification: 'Qualification',
+      selectQualification: 'Select Qualification',
+      freshGraduate: 'Are you a fresh graduate?',
+      yes: 'Yes',
+      no: 'No',
+      major: 'Major',
+      currentPosition: 'Current Position',
+      experienceYears: 'Years of Experience',
+      favoriteCity: 'Favorite City',
+      experienceLevel: 'Experience Level',
+      male: 'Male',
+      female: 'Female',
+      submit: 'Submit Application',
+      rolesTitle: 'Job Role',
+      rolesSub: 'Which job would you choose?',
+      cvLabel: 'Upload resume',
+      namePlaceholder: 'Enter your full name',
+      majorPlaceholder: 'e.g. Computer Science',
+      othersPlaceholder: 'Please specify...',
+      beginner: 'Beginner',
+      intermediate: 'Intermediate',
+      expert: 'Expert'
+    },
+    ar: {
+      title: 'نموذج طلب توظيف - المجدوعي القابضة',
+      name: 'الاسم',
+      id: 'الهوية الوطنية',
+      mobile: 'رقم الجوال',
+      email: 'البريد الإلكتروني',
+      nationality: 'الجنسية',
+      gender: 'الجنس',
+      qualification: 'المؤهل العلمي',
+      selectQualification: 'اختر المؤهل',
+      freshGraduate: 'هل أنت خريج جديد؟',
+      yes: 'نعم',
+      no: 'لا',
+      major: 'التخصص',
+      currentPosition: 'المسمى الوظيفي الحالي',
+      experienceYears: 'عدد سنوات الخبرة',
+      favoriteCity: 'المدينة المفضلة',
+      experienceLevel: 'مستوى الخبرة',
+      male: 'ذكر',
+      female: 'أنثى',
+      submit: 'إرسال الطلب',
+      rolesTitle: 'المسمى الوظيفي',
+      rolesSub: 'ما هي الوظيفة التي تود اختيارها؟',
+      cvLabel: 'رفع السيرة الذاتية',
+      namePlaceholder: 'أدخل الاسم الكامل',
+      majorPlaceholder: 'مثال: علوم حاسب',
+      othersPlaceholder: 'يرجى التحديد...',
+      beginner: 'مبتدئ',
+      intermediate: 'متوسط',
+      expert: 'خبير'
+    }
+  };
 
 // Helper to get the current text
 get t() {
@@ -145,15 +159,6 @@ get t() {
       this.selectedFile = file;
       this.fileName = file.name;
     }
-    if (file) {
-      if (file.type !== 'application/pdf') {
-        alert('Please upload a PDF file only.');
-        event.target.value = ''; // Reset input
-        return;
-      }
-      this.selectedFile = file;
-      this.fileName = file.name;
-    }
   }
 
   onRoleChange(role: string, event: Event) {
@@ -189,11 +194,17 @@ get t() {
         }
       });
 
-      console.log('FormData ready for backend. Contents:');
+      console.log('FormData Contents:');
       formData.forEach((value, key) => console.log(`${key}:`, value));
 
       // Typical HTTP call:
       // this.http.post('YOUR_API_URL', formData).subscribe(res => console.log(res));
+
+      this.surveyForm.reset();
+
+      alert('Application submitted successfully!');
+
+
     } else {
       this.surveyForm.markAllAsTouched();
       alert('Please fill all required fields correctly.');

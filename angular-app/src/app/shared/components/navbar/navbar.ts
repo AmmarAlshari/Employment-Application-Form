@@ -9,4 +9,8 @@ import { RouterLink } from '@angular/router';
 })
 export class NavbarComponent {
 
+  checkAr() {
+    return window.location.pathname.includes('Ar');
+  }
 }
+
