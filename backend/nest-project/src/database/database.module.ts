@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { entities } from './entities';
+import 'dotenv/config';
 
 @Module({
   imports: [

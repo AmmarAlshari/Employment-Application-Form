@@ -26,6 +26,9 @@ let LookupsController = class LookupsController {
     getRoles() {
         return this.LookupsService.getRoles();
     }
+    getQualifications() {
+        return this.LookupsService.getQualifications();
+    }
 };
 exports.LookupsController = LookupsController;
 __decorate([
@@ -46,6 +49,12 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], LookupsController.prototype, "getRoles", null);
+__decorate([
+    (0, common_1.Get)('qualifications'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], LookupsController.prototype, "getQualifications", null);
 exports.LookupsController = LookupsController = __decorate([
     (0, common_1.Controller)('lookups'),
     __metadata("design:paramtypes", [dynamicdata_service_1.LookupsService])

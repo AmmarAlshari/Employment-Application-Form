@@ -6,6 +6,7 @@ import { City } from '../database/entities/cities.entity';
 import { Nationality } from '../database/entities/nationality.entity';
 import { SelectedRole } from '../database/entities/selectedrole.entity';
 import { CreateApplicationDto } from './dtos/create-application.dto';
+import { Qualification } from '../database/entities/qaualification.entity';
 
 @Injectable()
 export class ApplicationService {
@@ -14,6 +15,8 @@ export class ApplicationService {
     @InjectRepository(City) private cityRepo: Repository<City>,
     @InjectRepository(Nationality) private natRepo: Repository<Nationality>,
     @InjectRepository(SelectedRole) private roleRepo: Repository<SelectedRole>,
+    @InjectRepository(Qualification)
+    private qualRepo: Repository<Qualification>,
   ) {}
 
   async create(data: CreateApplicationDto) {
@@ -27,7 +30,6 @@ export class ApplicationService {
       gender: data.gender,
       experienceLevel: data.experienceLevel,
       isFreshGraduate: data.isFreshGraduate ?? false,
-      qualification: data.qualification,
       major: data.major,
       currentPosition: data.currentPosition,
       experienceYears: data.experienceYears,
@@ -35,7 +37,6 @@ export class ApplicationService {
       remarks: data.remarks,
     });
 
-    // Nationality (required)
     const nationality = await this.natRepo.findOneBy({
       id: data.nationalityId,
     });
@@ -46,7 +47,6 @@ export class ApplicationService {
     }
     application.nationality = nationality;
 
-    // City (optional)
     if (data.favoriteCityId) {
       const city = await this.cityRepo.findOneBy({ id: data.favoriteCityId });
       if (!city) {
@@ -75,12 +75,28 @@ export class ApplicationService {
       application.selectedRoles = [];
     }
 
+    const qualification = await this.qualRepo.findOneBy({
+      id: data.qualificationId,
+    });
+
+    if (!qualification) {
+      throw new NotFoundException(
+        `Qualification with id ${data.qualificationId} not found`,
+      );
+    }
+    application.qualification = qualification;
+
     return this.repo.save(application);
   }
 
   findAll() {
     return this.repo.find({
-      relations: ['favoriteCity', 'nationality', 'selectedRoles'],
+      relations: [
+        'favoriteCity',
+        'nationality',
+        'selectedRoles',
+        'qualification',
+      ],
     });
   }
 
@@ -89,7 +105,12 @@ export class ApplicationService {
   async findOne(id: number): Promise<Application> {
     const data = await this.repo.findOne({
       where: { id },
-      relations: ['favoriteCity', 'nationality', 'selectedRoles'],
+      relations: [
+        'favoriteCity',
+        'nationality',
+        'selectedRoles',
+        'qualification',
+      ],
     });
 
     if (!data) {

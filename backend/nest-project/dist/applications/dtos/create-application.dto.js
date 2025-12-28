@@ -11,6 +11,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateApplicationDto = void 0;
 const class_validator_1 = require("class-validator");
+const class_transformer_1 = require("class-transformer");
+const englishlevel_enum_1 = require("../../common/enums/englishlevel.enum");
+const gender_enum_1 = require("../../common/enums/gender.enum");
 class CreateApplicationDto {
     name;
     nationalId;
@@ -22,7 +25,7 @@ class CreateApplicationDto {
     selectedRoleIds;
     experienceLevel;
     isFreshGraduate;
-    qualification;
+    qualificationId;
     major;
     currentPosition;
     experienceYears;
@@ -50,35 +53,42 @@ __decorate([
     __metadata("design:type", String)
 ], CreateApplicationDto.prototype, "email", void 0);
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsEnum)(gender_enum_1.Gender),
     __metadata("design:type", String)
 ], CreateApplicationDto.prototype, "gender", void 0);
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_transformer_1.Type)(() => Number),
     (0, class_validator_1.IsInt)(),
     __metadata("design:type", Number)
 ], CreateApplicationDto.prototype, "nationalityId", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
+    (0, class_transformer_1.Type)(() => Number),
     (0, class_validator_1.IsInt)(),
     __metadata("design:type", Number)
 ], CreateApplicationDto.prototype, "favoriteCityId", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsArray)(),
+    (0, class_transformer_1.Type)(() => Number),
+    (0, class_validator_1.IsInt)({ each: true }),
     __metadata("design:type", Array)
 ], CreateApplicationDto.prototype, "selectedRoleIds", void 0);
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsEnum)(englishlevel_enum_1.EnglishLevel),
     __metadata("design:type", String)
 ], CreateApplicationDto.prototype, "experienceLevel", void 0);
 __decorate([
-    (0, class_validator_1.IsOptional)(),
+    (0, class_transformer_1.Transform)(({ value }) => value === true || value === 'true' || value === 'Yes'),
+    (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
 ], CreateApplicationDto.prototype, "isFreshGraduate", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
-    __metadata("design:type", String)
-], CreateApplicationDto.prototype, "qualification", void 0);
+    (0, class_transformer_1.Type)(() => Number),
+    (0, class_validator_1.IsInt)(),
+    __metadata("design:type", Number)
+], CreateApplicationDto.prototype, "qualificationId", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
@@ -89,6 +99,8 @@ __decorate([
 ], CreateApplicationDto.prototype, "currentPosition", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
+    (0, class_transformer_1.Type)(() => Number),
+    (0, class_validator_1.IsInt)(),
     __metadata("design:type", Number)
 ], CreateApplicationDto.prototype, "experienceYears", void 0);
 __decorate([

@@ -10,13 +10,19 @@ exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const database_module_1 = require("./database/database.module");
 const application_module_1 = require("./applications/application.module");
-const dynamicdata_module_1 = require("./DynamicData/dynamicdata.module");
+const dynamicdata_module_1 = require("./dynamicdata/dynamicdata.module");
+const upload_module_1 = require("./uploads/upload.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [database_module_1.DatabaseModule, application_module_1.ApplicationModule, dynamicdata_module_1.DynamicDataModule],
+        imports: [
+            database_module_1.DatabaseModule,
+            application_module_1.ApplicationModule,
+            dynamicdata_module_1.DynamicDataModule,
+            upload_module_1.UploadsModule,
+        ],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

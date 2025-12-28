@@ -1,4 +1,4 @@
-import { Controller, Get} from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { LookupsService } from './dynamicdata.service';
 
 @Controller('lookups')
@@ -18,5 +18,9 @@ export class LookupsController {
   @Get('selected-roles')
   getRoles() {
     return this.LookupsService.getRoles();
+  }
+  @Get('qualifications')
+  getQualifications() {
+    return this.LookupsService.getQualifications();
   }
 }

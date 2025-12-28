@@ -5,4 +5,5 @@ export declare class LookupsController {
     getCities(): Promise<import("../database/entities/cities.entity").City[]>;
     getNationalities(): Promise<import("../database/entities/nationality.entity").Nationality[]>;
     getRoles(): Promise<import("../database/entities/selectedrole.entity").SelectedRole[]>;
+    getQualifications(): Promise<import("../database/entities/qaualification.entity").Qualification[]>;
 }

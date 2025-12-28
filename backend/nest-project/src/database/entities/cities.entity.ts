@@ -7,4 +7,7 @@ export class City {
 
   @Column()
   cityName: string;
+
+  @Column()
+  cityNameAr: string;
 }

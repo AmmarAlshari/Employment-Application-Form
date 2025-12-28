@@ -19,14 +19,17 @@ const typeorm_2 = require("typeorm");
 const cities_entity_1 = require("../database/entities/cities.entity");
 const nationality_entity_1 = require("../database/entities/nationality.entity");
 const selectedrole_entity_1 = require("../database/entities/selectedrole.entity");
+const qaualification_entity_1 = require("../database/entities/qaualification.entity");
 let LookupsService = class LookupsService {
     cityRepo;
     natRepo;
     roleRepo;
-    constructor(cityRepo, natRepo, roleRepo) {
+    qualRepo;
+    constructor(cityRepo, natRepo, roleRepo, qualRepo) {
         this.cityRepo = cityRepo;
         this.natRepo = natRepo;
         this.roleRepo = roleRepo;
+        this.qualRepo = qualRepo;
     }
     getCities() {
         return this.cityRepo.find();
@@ -37,6 +40,9 @@ let LookupsService = class LookupsService {
     getRoles() {
         return this.roleRepo.find();
     }
+    getQualifications() {
+        return this.qualRepo.find();
+    }
 };
 exports.LookupsService = LookupsService;
 exports.LookupsService = LookupsService = __decorate([
@@ -44,7 +50,9 @@ exports.LookupsService = LookupsService = __decorate([
     __param(0, (0, typeorm_1.InjectRepository)(cities_entity_1.City)),
     __param(1, (0, typeorm_1.InjectRepository)(nationality_entity_1.Nationality)),
     __param(2, (0, typeorm_1.InjectRepository)(selectedrole_entity_1.SelectedRole)),
+    __param(3, (0, typeorm_1.InjectRepository)(qaualification_entity_1.Qualification)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
+        typeorm_2.Repository,
         typeorm_2.Repository,
         typeorm_2.Repository])
 ], LookupsService);

@@ -6,10 +6,15 @@ import {
   JoinTable,
   JoinColumn,
   ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { SelectedRole } from './selectedrole.entity';
 import { City } from './cities.entity';
 import { Nationality } from './nationality.entity';
+import { Qualification } from './qaualification.entity';
+import { Gender } from 'src/common/enums/gender.enum';
+import { EnglishLevel } from 'src/common/enums/englishlevel.enum';
 
 @Entity('applications')
 export class Application {
@@ -19,20 +24,20 @@ export class Application {
   @Column()
   name: string;
 
+  @Column({ length: 10 })
+  nationalId: string;
+
   @Column({ length: 9 })
   mobile: string;
 
   @Column({ unique: true })
   email: string;
 
-  @Column()
-  gender: string;
+  @Column({ type: 'enum', enum: Gender })
+  gender: Gender;
 
-  @Column({ default: false })
+  @Column({ type: 'boolean', default: false })
   isFreshGraduate: boolean;
-
-  @Column({ nullable: true })
-  qualification?: string;
 
   @Column({ nullable: true })
   major?: string;
@@ -40,17 +45,26 @@ export class Application {
   @Column({ nullable: true })
   currentPosition?: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'int' })
   experienceYears?: number;
 
-  @Column()
-  experienceLevel: string;
+  @Column({ type: 'enum', enum: EnglishLevel })
+  experienceLevel: EnglishLevel;
 
   @Column({ type: 'text', nullable: true })
   otherRoleRemarks?: string;
 
   @Column({ type: 'text', nullable: true })
   remarks?: string;
+
+  @Column({ nullable: true })
+  resumeUrl?: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   @ManyToMany(() => SelectedRole)
   @JoinTable({
@@ -66,16 +80,15 @@ export class Application {
   })
   selectedRoles: SelectedRole[];
 
-  @ManyToOne(() => City, {
-    nullable: true,
-    onDelete: 'SET NULL',
-  })
+  @ManyToOne(() => City, {})
   @JoinColumn({ name: 'favorite_city_id' })
   favoriteCity?: City;
 
-  @ManyToOne(() => Nationality, {
-    onDelete: 'SET NULL',
-  })
+  @ManyToOne(() => Nationality, {})
   @JoinColumn({ name: 'nationality_id' })
   nationality?: Nationality;
+
+  @ManyToOne(() => Qualification)
+  @JoinColumn({ name: 'qualification_id' })
+  qualification?: Qualification;
 }

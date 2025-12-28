@@ -7,4 +7,7 @@ export class SelectedRole {
 
   @Column()
   roleName: string;
+
+  @Column()
+  roleNameAr: string;
 }

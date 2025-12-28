@@ -4,7 +4,13 @@ import {
   Length,
   IsOptional,
   IsInt,
+  IsEnum,
+  IsArray,
+  IsBoolean,
 } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import { EnglishLevel } from 'src/common/enums/englishlevel.enum';
+import { Gender } from 'src/common/enums/gender.enum';
 
 export class CreateApplicationDto {
   @IsNotEmpty()
@@ -22,28 +28,37 @@ export class CreateApplicationDto {
   @IsEmail()
   email: string;
 
-  @IsNotEmpty()
-  gender: string;
+  @IsEnum(Gender)
+  gender: Gender;
 
-  @IsNotEmpty()
+  @Type(() => Number)
   @IsInt()
   nationalityId: number;
 
   @IsOptional()
+  @Type(() => Number)
   @IsInt()
   favoriteCityId?: number;
 
   @IsOptional()
+  @IsArray()
+  @Type(() => Number)
+  @IsInt({ each: true })
   selectedRoleIds?: number[];
 
-  @IsNotEmpty()
-  experienceLevel: string;
+  @IsEnum(EnglishLevel)
+  experienceLevel: EnglishLevel;
+
+  @Transform(
+    ({ value }) => value === true || value === 'true' || value === 'Yes',
+  )
+  @IsBoolean()
+  isFreshGraduate: boolean;
 
   @IsOptional()
-  isFreshGraduate?: boolean;
-
-  @IsOptional()
-  qualification?: string;
+  @Type(() => Number)
+  @IsInt()
+  qualificationId?: number;
 
   @IsOptional()
   major?: string;
@@ -52,6 +67,8 @@ export class CreateApplicationDto {
   currentPosition?: string;
 
   @IsOptional()
+  @Type(() => Number)
+  @IsInt()
   experienceYears?: number;
 
   @IsOptional()

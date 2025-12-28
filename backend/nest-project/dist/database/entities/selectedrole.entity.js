@@ -14,6 +14,7 @@ const typeorm_1 = require("typeorm");
 let SelectedRole = class SelectedRole {
     id;
     roleName;
+    roleNameAr;
 };
 exports.SelectedRole = SelectedRole;
 __decorate([
@@ -24,6 +25,10 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], SelectedRole.prototype, "roleName", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], SelectedRole.prototype, "roleNameAr", void 0);
 exports.SelectedRole = SelectedRole = __decorate([
     (0, typeorm_1.Entity)('selected_roles')
 ], SelectedRole);

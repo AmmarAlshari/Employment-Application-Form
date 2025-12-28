@@ -14,6 +14,7 @@ const typeorm_1 = require("typeorm");
 let City = class City {
     id;
     cityName;
+    cityNameAr;
 };
 exports.City = City;
 __decorate([
@@ -24,6 +25,10 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], City.prototype, "cityName", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], City.prototype, "cityNameAr", void 0);
 exports.City = City = __decorate([
     (0, typeorm_1.Entity)('cities')
 ], City);

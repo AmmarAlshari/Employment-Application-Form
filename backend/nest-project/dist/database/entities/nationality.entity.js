@@ -14,6 +14,7 @@ const typeorm_1 = require("typeorm");
 let Nationality = class Nationality {
     id;
     countryName;
+    countryNameAr;
 };
 exports.Nationality = Nationality;
 __decorate([
@@ -24,6 +25,10 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Nationality.prototype, "countryName", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], Nationality.prototype, "countryNameAr", void 0);
 exports.Nationality = Nationality = __decorate([
     (0, typeorm_1.Entity)('nationalities')
 ], Nationality);

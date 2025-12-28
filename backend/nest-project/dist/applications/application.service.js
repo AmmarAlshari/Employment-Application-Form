@@ -20,16 +20,19 @@ const application_entity_1 = require("../database/entities/application.entity");
 const cities_entity_1 = require("../database/entities/cities.entity");
 const nationality_entity_1 = require("../database/entities/nationality.entity");
 const selectedrole_entity_1 = require("../database/entities/selectedrole.entity");
+const qaualification_entity_1 = require("../database/entities/qaualification.entity");
 let ApplicationService = class ApplicationService {
     repo;
     cityRepo;
     natRepo;
     roleRepo;
-    constructor(repo, cityRepo, natRepo, roleRepo) {
+    qualRepo;
+    constructor(repo, cityRepo, natRepo, roleRepo, qualRepo) {
         this.repo = repo;
         this.cityRepo = cityRepo;
         this.natRepo = natRepo;
         this.roleRepo = roleRepo;
+        this.qualRepo = qualRepo;
     }
     async create(data) {
         console.log('Creating application with data:', data);
@@ -40,14 +43,15 @@ let ApplicationService = class ApplicationService {
             gender: data.gender,
             experienceLevel: data.experienceLevel,
             isFreshGraduate: data.isFreshGraduate ?? false,
-            qualification: data.qualification,
             major: data.major,
             currentPosition: data.currentPosition,
             experienceYears: data.experienceYears,
             otherRoleRemarks: data.otherRoleRemarks,
             remarks: data.remarks,
         });
-        const nationality = await this.natRepo.findOneBy({ id: data.nationalityId });
+        const nationality = await this.natRepo.findOneBy({
+            id: data.nationalityId,
+        });
         if (!nationality) {
             throw new common_1.NotFoundException(`Nationality with id ${data.nationalityId} not found`);
         }
@@ -59,8 +63,11 @@ let ApplicationService = class ApplicationService {
             }
             application.favoriteCity = city;
         }
-        if (Array.isArray(data.selectedRoleIds) && data.selectedRoleIds.length > 0) {
-            const roles = await this.roleRepo.findBy({ id: (0, typeorm_2.In)(data.selectedRoleIds) });
+        if (Array.isArray(data.selectedRoleIds) &&
+            data.selectedRoleIds.length > 0) {
+            const roles = await this.roleRepo.findBy({
+                id: (0, typeorm_2.In)(data.selectedRoleIds),
+            });
             if (roles.length !== data.selectedRoleIds.length) {
                 throw new common_1.NotFoundException(`One or more selected roles not found`);
             }
@@ -69,17 +76,34 @@ let ApplicationService = class ApplicationService {
         else {
             application.selectedRoles = [];
         }
+        const qualification = await this.qualRepo.findOneBy({
+            id: data.qualificationId,
+        });
+        if (!qualification) {
+            throw new common_1.NotFoundException(`Qualification with id ${data.qualificationId} not found`);
+        }
+        application.qualification = qualification;
         return this.repo.save(application);
     }
     findAll() {
         return this.repo.find({
-            relations: ['favoriteCity', 'nationality', 'selectedRoles'],
+            relations: [
+                'favoriteCity',
+                'nationality',
+                'selectedRoles',
+                'qualification',
+            ],
         });
     }
     async findOne(id) {
         const data = await this.repo.findOne({
             where: { id },
-            relations: ['favoriteCity', 'nationality', 'selectedRoles'],
+            relations: [
+                'favoriteCity',
+                'nationality',
+                'selectedRoles',
+                'qualification',
+            ],
         });
         if (!data) {
             throw new common_1.NotFoundException(`Application with ID ${id} not found`);
@@ -98,7 +122,9 @@ exports.ApplicationService = ApplicationService = __decorate([
     __param(1, (0, typeorm_1.InjectRepository)(cities_entity_1.City)),
     __param(2, (0, typeorm_1.InjectRepository)(nationality_entity_1.Nationality)),
     __param(3, (0, typeorm_1.InjectRepository)(selectedrole_entity_1.SelectedRole)),
+    __param(4, (0, typeorm_1.InjectRepository)(qaualification_entity_1.Qualification)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
+        typeorm_2.Repository,
         typeorm_2.Repository,
         typeorm_2.Repository,
         typeorm_2.Repository])

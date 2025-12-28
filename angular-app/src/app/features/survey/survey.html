@@ -38,28 +38,36 @@
           <label class="flex items-center gap-2 cursor-pointer"><input type="radio" formControlName="gender" value="Female" class="accent-blue-600" />{{ t.female }}</label>
         </div>
       </div>
-      <div class="space-y-1">
+       <div class="space-y-1">
         <label class="block font-semibold text-gray-700">{{ t.nationality }}</label>
-        <input type="text" formControlName="nationality" class="w-full border border-gray-300 p-1.5 rounded outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 shadow-sm" />
+       <select
+  formControlName="nationalityId"
+  class="w-full border border-gray-300 p-1.5 rounded outline-none bg-white focus:border-blue-600 focus:ring-1 focus:ring-blue-600 shadow-sm"
+>
+  <option *ngFor="let n of nationalities" [ngValue]="n.id">
+    {{ isArabic ? n.countryNameAr : n.countryName }}
+  </option>
+</select>
       </div>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
-      <div class="space-y-1">
-        <label class="block font-semibold text-gray-700">{{ t.qualification }}</label>
-        <select formControlName="qualification" class="w-full border border-gray-300 p-2 rounded outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 bg-white shadow-sm">
-          <option value="" disabled selected>{{ t.selectQualification }}</option>
-          <option value="highschool">High school</option>
-          <option value="diploma">Diploma</option>
-          <option value="bachelor">Bachelor</option>
-          <option value="master">Master</option>
-        </select>
+    <div class="space-y-1">
+        <label class="block font-semibold text-gray-700">{{ t.selectQualification }}</label>
+       <select
+  formControlName="qualificationId"
+  class="w-full border border-gray-300 p-1.5 rounded outline-none bg-white focus:border-blue-600 focus:ring-1 focus:ring-blue-600 shadow-sm"
+>
+  <option *ngFor="let q of qualifications" [ngValue]="q.id">
+    {{ isArabic ? q.qualificationNameAr : q.qualificationName }}
+  </option>
+</select>
       </div>
       <div class="space-y-1">
         <label class="block font-semibold text-gray-700">{{ t.freshGraduate }}</label>
         <div class="flex gap-6 py-1.5">
-          <label class="flex items-center gap-2 cursor-pointer"><input type="radio" formControlName="isFreshGraduate" value="Yes" class="accent-blue-600" />{{ t.yes }}</label>
-          <label class="flex items-center gap-2 cursor-pointer"><input type="radio" formControlName="isFreshGraduate" value="No" class="accent-blue-600" />{{ t.no }}</label>
+          <label class="flex items-center gap-2 cursor-pointer"><input type="radio" formControlName="isFreshGraduate" [value]="true" class="accent-blue-600" />{{ t.yes }}</label>
+          <label class="flex items-center gap-2 cursor-pointer"><input type="radio" formControlName="isFreshGraduate" [value]="false" class="accent-blue-600" />{{ t.no }}</label>
         </div>
       </div>
     </div>
@@ -82,12 +90,14 @@
       </div>
       <div class="space-y-1">
         <label class="block font-semibold text-gray-700">{{ t.favoriteCity }}</label>
-        <select formControlName="favoriteCity" class="w-full border border-gray-300 p-1.5 rounded outline-none bg-white focus:border-blue-600 focus:ring-1 focus:ring-blue-600 shadow-sm">
-          <option value=""></option>
-          <option value="Dammam">Dammam</option>
-          <option value="Riyadh">Riyadh</option>
-          <option value="Jeddah">Jeddah</option>
-        </select>
+       <select
+  formControlName="favoriteCityId"
+  class="w-full border border-gray-300 p-1.5 rounded outline-none bg-white focus:border-blue-600 focus:ring-1 focus:ring-blue-600 shadow-sm"
+>
+  <option *ngFor="let c of cities" [ngValue]="c.id">
+    {{ isArabic ? c.cityNameAr : c.cityName }}
+  </option>
+</select>
       </div>
     </div>
 
@@ -102,21 +112,46 @@
 
     <div class="space-y-2">
       <label class="block font-semibold text-[#2b5a9a] border-b border-gray-200">{{ t.rolesTitle }}</label>
-      <p class="text-xs text-gray-600 mb-2">{{ t.rolesSub }}</p>
+      <p class="text-xs text-gray-600 mb-2"></p>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-3 bg-gray-50 p-4 border border-gray-200 rounded">
-        @for (role of jobRoles; track role.key) {
-          <label class="flex items-center gap-2 cursor-pointer hover:text-blue-700 transition-colors">
-            <input type="checkbox" (change)="onRoleChange(role.key, $event)" class="w-4 h-4 accent-blue-600 cursor-pointer" />
-            <span class="text-[13px]">{{ isArabic ? role.ar : role.en }}</span>
-          </label>
-        }
-        @if (isRoleSelected('Others')) {
-          <div class="col-span-full mt-2">
-            <input type="text" formControlName="otherRoleRemarks" [placeholder]="t.othersPlaceholder" class="w-full border border-gray-300 p-2 rounded outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 bg-white" />
-          </div>
-        }
+        @for (role of selectedRoles; track role.id) {
+  <label class="flex items-center gap-2 cursor-pointer hover:text-blue-700 transition-colors">
+    <input
+      type="checkbox"
+      class="w-4 h-4 accent-blue-600 cursor-pointer"
+      [checked]="isRoleSelected(role.id)"
+      (change)="onRoleChange(role.id, $event)"
+    />
+
+    <span class="text-[13px]">
+      {{isArabic ? role.roleNameAr : role.roleName}}
+    </span>
+  </label>
+}
+
+<label class="flex items-center gap-2 cursor-pointer mt-3">
+  <input
+    type="checkbox"
+    class="w-4 h-4 accent-blue-600 cursor-pointer"
+    formControlName="isOtherRoleSelected"
+  />
+  <span class="text-[13px]">
+    {{ isArabic ? 'أخرى' : 'Other' }}
+  </span>
+</label>
       </div>
     </div>
+    <div
+  *ngIf="surveyForm.get('isOtherRoleSelected')?.value"
+  class="col-span-full mt-2"
+>
+  <input
+    type="text"
+    formControlName="otherRoleRemarks"
+    class="w-full border border-gray-300 p-2 rounded text-[13px]"
+    [placeholder]="t.othersPlaceholder"
+  />
+</div>
 
     <div class="border border-blue-200 rounded mt-8 overflow-hidden">
       <div class="bg-blue-50 px-4 py-2 border-b border-blue-200"><h3 class="font-bold text-[#2b5a9a]">Remarks:</h3></div>

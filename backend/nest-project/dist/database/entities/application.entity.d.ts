@@ -1,21 +1,28 @@
 import { SelectedRole } from './selectedrole.entity';
 import { City } from './cities.entity';
 import { Nationality } from './nationality.entity';
+import { Qualification } from './qaualification.entity';
+import { Gender } from 'src/common/enums/gender.enum';
+import { EnglishLevel } from 'src/common/enums/englishlevel.enum';
 export declare class Application {
     id: number;
     name: string;
+    nationalId: string;
     mobile: string;
     email: string;
-    gender: string;
+    gender: Gender;
     isFreshGraduate: boolean;
-    qualification?: string;
     major?: string;
     currentPosition?: string;
     experienceYears?: number;
-    experienceLevel: string;
+    experienceLevel: EnglishLevel;
     otherRoleRemarks?: string;
     remarks?: string;
+    resumeUrl?: string;
+    createdAt: Date;
+    updatedAt: Date;
     selectedRoles: SelectedRole[];
     favoriteCity?: City;
     nationality?: Nationality;
+    qualification?: Qualification;
 }

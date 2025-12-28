@@ -1,14 +1,13 @@
-import {Column , Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('nationalities')
-
 export class Nationality {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    countryName: string;
+  @Column()
+  countryName: string;
+
+  @Column()
+  countryNameAr: string;
 }
-
-
-
