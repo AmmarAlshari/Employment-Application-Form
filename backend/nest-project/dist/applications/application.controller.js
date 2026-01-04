@@ -14,7 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ApplicationController = void 0;
 const application_service_1 = require("./application.service");
-const create_application_dto_1 = require("./dtos/create-application.dto");
+const application_dto_1 = require("./dtos/application.dto");
 const common_1 = require("@nestjs/common");
 let ApplicationController = class ApplicationController {
     applicationService;
@@ -39,7 +39,7 @@ __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_application_dto_1.CreateApplicationDto]),
+    __metadata("design:paramtypes", [application_dto_1.CreateApplicationDto]),
     __metadata("design:returntype", void 0)
 ], ApplicationController.prototype, "create", null);
 __decorate([

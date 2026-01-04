@@ -9,24 +9,26 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DatabaseModule = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
-const entities_1 = require("./entities");
-require("dotenv/config");
+const config_1 = require("@nestjs/config");
 let DatabaseModule = class DatabaseModule {
 };
 exports.DatabaseModule = DatabaseModule;
 exports.DatabaseModule = DatabaseModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            typeorm_1.TypeOrmModule.forRoot({
-                type: 'mysql',
-                host: 'localhost',
-                port: 3306,
-                username: 'root',
-                password: '',
-                database: 'application',
-                autoLoadEntities: true,
-                synchronize: true,
-                entities: entities_1.entities,
+            typeorm_1.TypeOrmModule.forRootAsync({
+                imports: [config_1.ConfigModule],
+                inject: [config_1.ConfigService],
+                useFactory: (configService) => ({
+                    type: 'mysql',
+                    host: configService.get('DATABASE_HOST'),
+                    port: configService.get('DATABASE_PORT'),
+                    username: configService.get('DATABASE_USERNAME'),
+                    password: configService.get('DATABASE_PASSWORD'),
+                    database: configService.get('DATABASE_NAME'),
+                    autoLoadEntities: true,
+                    synchronize: true,
+                }),
             }),
         ],
     })

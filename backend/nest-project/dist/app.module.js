@@ -12,6 +12,9 @@ const database_module_1 = require("./database/database.module");
 const application_module_1 = require("./applications/application.module");
 const dynamicdata_module_1 = require("./dynamicdata/dynamicdata.module");
 const upload_module_1 = require("./uploads/upload.module");
+const auth_module_1 = require("./auth/auth.module");
+const config_1 = require("@nestjs/config");
+const dashboard_module_1 = require("./dashboard/dashboard.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -22,6 +25,11 @@ exports.AppModule = AppModule = __decorate([
             application_module_1.ApplicationModule,
             dynamicdata_module_1.DynamicDataModule,
             upload_module_1.UploadsModule,
+            auth_module_1.AuthModule,
+            dashboard_module_1.DashboardUserModule,
+            config_1.ConfigModule.forRoot({
+                isGlobal: true,
+            }),
         ],
     })
 ], AppModule);

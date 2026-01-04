@@ -1,6 +1,6 @@
 import { Application } from '../database/entities/application.entity';
 import { ApplicationService } from './application.service';
-import { CreateApplicationDto } from './dtos/create-application.dto';
+import { CreateApplicationDto } from './dtos/application.dto';
 import { Controller, Get, Post, Body, Param, Put } from '@nestjs/common';
 
 @Controller('applications')

@@ -17,6 +17,7 @@ const nationality_entity_1 = require("./nationality.entity");
 const qaualification_entity_1 = require("./qaualification.entity");
 const gender_enum_1 = require("../../common/enums/gender.enum");
 const englishlevel_enum_1 = require("../../common/enums/englishlevel.enum");
+const application_status_enum_1 = require("../../common/enums/application-status.enum");
 let Application = class Application {
     id;
     name;
@@ -34,6 +35,7 @@ let Application = class Application {
     resumeUrl;
     createdAt;
     updatedAt;
+    ApplicationStatus;
     selectedRoles;
     favoriteCity;
     nationality;
@@ -104,6 +106,14 @@ __decorate([
     (0, typeorm_1.UpdateDateColumn)(),
     __metadata("design:type", Date)
 ], Application.prototype, "updatedAt", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        type: 'enum',
+        enum: application_status_enum_1.ApplicationStatus,
+        default: application_status_enum_1.ApplicationStatus.NEW,
+    }),
+    __metadata("design:type", String)
+], Application.prototype, "ApplicationStatus", void 0);
 __decorate([
     (0, typeorm_1.ManyToMany)(() => selectedrole_entity_1.SelectedRole),
     (0, typeorm_1.JoinTable)({

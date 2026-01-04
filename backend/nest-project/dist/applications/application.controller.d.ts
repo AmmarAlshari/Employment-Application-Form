@@ -1,6 +1,6 @@
 import { Application } from '../database/entities/application.entity';
 import { ApplicationService } from './application.service';
-import { CreateApplicationDto } from './dtos/create-application.dto';
+import { CreateApplicationDto } from './dtos/application.dto';
 export declare class ApplicationController {
     private readonly applicationService;
     constructor(applicationService: ApplicationService);

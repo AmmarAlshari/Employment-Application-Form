@@ -3,7 +3,7 @@ import { Application } from '../database/entities/application.entity';
 import { City } from '../database/entities/cities.entity';
 import { Nationality } from '../database/entities/nationality.entity';
 import { SelectedRole } from '../database/entities/selectedrole.entity';
-import { CreateApplicationDto } from './dtos/create-application.dto';
+import { CreateApplicationDto } from './dtos/application.dto';
 import { Qualification } from '../database/entities/qaualification.entity';
 export declare class ApplicationService {
     private repo;

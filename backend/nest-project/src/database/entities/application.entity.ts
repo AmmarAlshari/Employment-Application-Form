@@ -15,6 +15,7 @@ import { Nationality } from './nationality.entity';
 import { Qualification } from './qaualification.entity';
 import { Gender } from 'src/common/enums/gender.enum';
 import { EnglishLevel } from 'src/common/enums/englishlevel.enum';
+import { ApplicationStatus } from 'src/common/enums/application-status.enum';
 
 @Entity('applications')
 export class Application {
@@ -65,6 +66,13 @@ export class Application {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @Column({
+    type: 'enum',
+    enum: ApplicationStatus,
+    default: ApplicationStatus.NEW,
+  })
+  ApplicationStatus: ApplicationStatus;
 
   @ManyToMany(() => SelectedRole)
   @JoinTable({

@@ -50,3 +50,5 @@ export class UploadsController {
     return this.uploadsService.attachCvToApplication(+id, resumeUrl);
   }
 }
+
+
