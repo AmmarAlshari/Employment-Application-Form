@@ -1,7 +1,17 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import {
+  LookupsService,
+  City,
+  Nationality,
+  SelectedRole,
+  Qualification,
+} from '../../api/lookups.service';
+import { SURVEY_TRANSLATIONS } from '../../i18n/survey.translation';
+import { forkJoin } from 'rxjs/internal/observable/forkJoin';
+import { HttpClient } from '@angular/common/http';
+import { enviorments } from '../../../environments/environment';
 
 @Component({
   selector: 'app-survey',
@@ -9,116 +19,50 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './survey.html',
 })
-export class SurveyComponent {
-  // Inject the tools we need
-  private route = inject(ActivatedRoute);
-  
-
+export class SurveyComponent implements OnInit {
   isArabic = false;
 
-  constructor() {
-    // Logic to detect if the URL is 'IndexAr'
+  constructor(private lookupsService: LookupsService, private http: HttpClient) {
     const path = window.location.pathname;
     this.isArabic = path.includes('Ar');
   }
 
-  translations: any = {
-    en: {
-      title: 'Employment Application Form',
-      name: 'Name',
-      nationality: 'Nationality',
-      id: 'National ID',
-      mobile: 'Mobile Number',
-      email: 'Email',
-      gender: 'Gender',
-      qualification: 'Qualification',
-      selectQualification: 'Select Qualification',
-      freshGraduate: 'Are you a fresh graduate?',
-      yes: 'Yes',
-      no: 'No',
-      major: 'Major',
-      currentPosition: 'Current Position',
-      experienceYears: 'Years of Experience',
-      favoriteCity: 'Favorite City',
-      experienceLevel: 'Experience Level',
-      male: 'Male',
-      female: 'Female',
-      submit: 'Submit Application',
-      rolesTitle: 'Job Role',
-      rolesSub: 'Which job would you choose?',
-      cvLabel: 'Upload resume',
-      namePlaceholder: 'Enter your full name',
-      majorPlaceholder: 'e.g. Computer Science',
-      othersPlaceholder: 'Please specify...',
-      beginner: 'Beginner',
-      intermediate: 'Intermediate',
-      expert: 'Expert'
-    },
-    ar: {
-      title: 'نموذج طلب توظيف - المجدوعي القابضة',
-      name: 'الاسم',
-      id: 'الهوية الوطنية',
-      mobile: 'رقم الجوال',
-      email: 'البريد الإلكتروني',
-      nationality: 'الجنسية',
-      gender: 'الجنس',
-      qualification: 'المؤهل العلمي',
-      selectQualification: 'اختر المؤهل',
-      freshGraduate: 'هل أنت خريج جديد؟',
-      yes: 'نعم',
-      no: 'لا',
-      major: 'التخصص',
-      currentPosition: 'المسمى الوظيفي الحالي',
-      experienceYears: 'عدد سنوات الخبرة',
-      favoriteCity: 'المدينة المفضلة',
-      experienceLevel: 'مستوى الخبرة',
-      male: 'ذكر',
-      female: 'أنثى',
-      submit: 'إرسال الطلب',
-      rolesTitle: 'المسمى الوظيفي',
-      rolesSub: 'ما هي الوظيفة التي تود اختيارها؟',
-      cvLabel: 'رفع السيرة الذاتية',
-      namePlaceholder: 'أدخل الاسم الكامل',
-      majorPlaceholder: 'مثال: علوم حاسب',
-      othersPlaceholder: 'يرجى التحديد...',
-      beginner: 'مبتدئ',
-      intermediate: 'متوسط',
-      expert: 'خبير'
-    }
-  };
+  cities: City[] = [];
+  nationalities: Nationality[] = [];
+  selectedRoles: SelectedRole[] = [];
+  qualifications: Qualification[] = [];
 
-// Helper to get the current text
-get t() {
-  return this.isArabic ? this.translations.ar : this.translations.en;
-}
+  ngOnInit(): void {
+    forkJoin({
+      cities: this.lookupsService.getCities(),
+      nationalities: this.lookupsService.getNationalities(),
+      roles: this.lookupsService.getSelectedRoles(),
+      qualifications: this.lookupsService.getQualifications(),
+    }).subscribe({
+      next: (res) => {
+        console.log(res);
+        this.cities = res.cities;
+        this.nationalities = res.nationalities;
+        this.selectedRoles = res.roles;
+        this.qualifications = res.qualifications;
+      },
+      error: (err) => console.error(err),
+    });
+    this.surveyForm.get('isOtherRoleSelected')?.valueChanges.subscribe((checked) => {
+      if (!checked) {
+        this.surveyForm.get('otherRoleRemarks')?.reset();
+      }
+    });
+  }
+  translations = SURVEY_TRANSLATIONS;
+  // Helper to get the current text
+  get t() {
+    return this.isArabic ? this.translations.ar : this.translations.en;
+  }
 
   // Store the actual file object
   selectedFile: File | null = null;
   fileName: string = '';
-
-  jobRoles = [
-  { key: 'Finance', en: 'Finance', ar: 'المالية' },
-  { key: 'Accounting', en: 'Accounting', ar: 'المحاسبة' },
-  { key: 'Human resources', en: 'Human resources', ar: 'الموارد البشرية' },
-  { key: 'Marketing', en: 'Marketing', ar: 'التسويق' },
-  { key: 'Sales', en: 'Sales', ar: 'المبيعات' },
-  { key: 'Supply Chain', en: 'Supply Chain', ar: 'سلسلة الامدادات واللوجستيات' },
-  { key: 'Strategy', en: 'Strategy', ar: 'القطاع الاستراتيجي' },
-  { key: 'Procurement', en: 'Procurement', ar: 'المشتريات' },
-  { key: 'Organization Development', en: 'Organization Development', ar: 'التطوير التنظيمي' },
-  { key: 'Engineering', en: 'Engineering', ar: 'الهندسة' },
-  { key: 'Secretary', en: 'Secretary', ar: 'السكرتارية' },
-  { key: 'Real Estate Field', en: 'Real Estate Field', ar: 'قطاع الأملاك والعقار' },
-  { key: 'Auditing', en: 'Auditing', ar: 'التدقيق' },
-  { key: 'Information Technology', en: 'Information Technology', ar: 'تقنية المعلومات' },
-  { key: 'Networking', en: 'Networking', ar: 'شبكات' },
-  { key: 'Programming', en: 'Programming', ar: 'البرمجة' },
-  { key: 'Business Solution', en: 'Business Solution', ar: 'حلول الأعمال' },
-  { key: 'Investment', en: 'Investment', ar: 'قطاع الاستثمار' },
-  { key: 'Customer Service', en: 'Customer Service', ar: 'خدمة العملاء' },
-  { key: 'Technician', en: 'Technician', ar: 'فني صيانة' },
-  { key: 'Others', en: 'Others', ar: 'اخرى' }
-];
 
   surveyForm = new FormGroup({
     name: new FormControl('', Validators.required),
@@ -126,23 +70,24 @@ get t() {
     mobile: new FormControl('', [Validators.required, Validators.pattern('^5[0-9]{8}$')]),
     email: new FormControl('', [Validators.required, Validators.email]),
     gender: new FormControl('Male'),
-    nationality: new FormControl('', Validators.required),
-    qualification: new FormControl(''),
+    nationalityId: new FormControl<number | null>(null, Validators.required),
+    qualificationId: new FormControl<number | null>(null),
     major: new FormControl(''),
-    isFreshGraduate: new FormControl('No'),
+    isFreshGraduate: new FormControl<boolean>(false),
     currentPosition: new FormControl(''),
     experienceYears: new FormControl(''),
-    favoriteCity: new FormControl(''),
+    favoriteCityId: new FormControl<number | null>(null),
     experienceLevel: new FormControl('Beginner'),
-    selectedRoles: new FormControl([] as string[]),
+    selectedRoleIds: new FormControl<number[]>([]),
+    isOtherRoleSelected: new FormControl(false),
     otherRoleRemarks: new FormControl(''),
     remarks: new FormControl(''),
   });
 
   // Helper for checkbox state
-  isRoleSelected(role: string): boolean {
-    const roles = this.surveyForm.get('selectedRoles')?.value || [];
-    return roles.includes(role);
+  isRoleSelected(roleId: number): boolean {
+    const roles = this.surveyForm.get('selectedRoleIds')?.value ?? [];
+    return roles.includes(roleId);
   }
 
   // Handle file selection
@@ -161,53 +106,91 @@ get t() {
     }
   }
 
-  onRoleChange(role: string, event: Event) {
+  onRoleChange(roleId: number, event: Event) {
     const isChecked = (event.target as HTMLInputElement).checked;
-    const currentRoles = this.surveyForm.get('selectedRoles')?.value || [];
+    const currentRoles = this.surveyForm.get('selectedRoleIds')?.value ?? [];
 
     if (isChecked) {
-      this.surveyForm.get('selectedRoles')?.setValue([...currentRoles, role]);
+      this.surveyForm.get('selectedRoleIds')?.setValue([...currentRoles, roleId]);
     } else {
-      this.surveyForm.get('selectedRoles')?.setValue(currentRoles.filter((r) => r !== role));
+      this.surveyForm.get('selectedRoleIds')?.setValue(currentRoles.filter((id) => id !== roleId));
     }
   }
 
+  resetForm() {
+    this.surveyForm.reset();
+    this.selectedFile = null;
+    this.fileName = '';
+  }
+
   onSubmit() {
-    if (this.surveyForm.valid) {
-      // Create FormData for Multipart/Form-Data request
-      const formData = new FormData();
-
-      // Add the file if it exists
-      if (this.selectedFile) {
-        formData.append('cv', this.selectedFile, this.selectedFile.name);
-      }
-
-      // Add all form text fields
-      const formValues = this.surveyForm.getRawValue();
-      Object.keys(formValues).forEach((key) => {
-        // Convert arrays to strings if necessary, or append individually
-        const value = formValues[key as keyof typeof formValues];
-        if (Array.isArray(value)) {
-          formData.append(key, JSON.stringify(value));
-        } else {
-          formData.append(key, value as string);
-        }
-      });
-
-      console.log('FormData Contents:');
-      formData.forEach((value, key) => console.log(`${key}:`, value));
-
-      // Typical HTTP call:
-      // this.http.post('YOUR_API_URL', formData).subscribe(res => console.log(res));
-
-      this.surveyForm.reset();
-
-      alert('Application submitted successfully!');
-
-
-    } else {
+    if (!this.surveyForm.valid) {
       this.surveyForm.markAllAsTouched();
       alert('Please fill all required fields correctly.');
+      return;
     }
+
+    const raw = this.surveyForm.getRawValue();
+
+    const payload: any = {
+      name: raw.name,
+      nationalId: raw.nationalId,
+      mobile: raw.mobile,
+      email: raw.email,
+      gender: raw.gender,
+
+      nationalityId: raw.nationalityId,
+      qualificationId: raw.qualificationId ?? undefined,
+      favoriteCityId: raw.favoriteCityId ?? undefined,
+
+      major: raw.major || undefined,
+      currentPosition: raw.currentPosition || undefined,
+      experienceYears: raw.experienceYears ?? undefined,
+
+      experienceLevel: raw.experienceLevel,
+
+      selectedRoleIds: raw.selectedRoleIds,
+
+      isFreshGraduate: raw.isFreshGraduate,
+
+      otherRoleRemarks: raw.isOtherRoleSelected ? raw.otherRoleRemarks || undefined : undefined,
+      remarks: raw.remarks || undefined,
+    };
+
+    this.http.post(`${enviorments.apiUrl}/applications`, payload).subscribe({
+      next: (res: any) => {
+        console.log('Application created:', res);
+
+        if (this.selectedFile && res?.id) {
+          this.uploadCv(res.id);
+        } else {
+          this.resetForm();
+          alert('Application submitted successfully!');
+        }
+      },
+      error: (err) => {
+        console.error('Create application error:', err.error?.message || err);
+        alert('Failed to submit application.');
+      },
+    });
+  }
+
+  uploadCv(applicationId: number) {
+    if (!this.selectedFile) return;
+
+    const formData = new FormData();
+    formData.append('cv', this.selectedFile);
+
+    this.http.post(`${enviorments.apiUrl}/applications/${applicationId}/cv`, formData).subscribe({
+      next: (res) => {
+        console.log('CV uploaded:', res);
+        this.resetForm();
+        alert('Application submitted successfully!');
+      },
+      error: (err) => {
+        console.error('CV upload error:', err);
+        alert('Application saved, but CV upload failed.');
+      },
+    });
   }
 }

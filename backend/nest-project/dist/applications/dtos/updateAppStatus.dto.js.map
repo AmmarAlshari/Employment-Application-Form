@@ -1,0 +1,1 @@
+{"version":3,"file":"updateAppStatus.dto.js","sourceRoot":"","sources":["../../../src/applications/dtos/updateAppStatus.dto.ts"],"names":[],"mappings":";;;;;;;;;;;;AAAA,qDAAyC;AACzC,gEAA4D;AAE5D,MAAa,uBAAuB;IAElC,iBAAiB,CAAqB;CACvC;AAHD,0DAGC;AADC;IADC,IAAA,wBAAM,EAAC,wCAAkB,CAAC;8BACR,wCAAkB;kEAAC"}

@@ -1,0 +1,5 @@
+export enum EnglishLevel {
+    BEGINNER = 'Beginner',
+    INTERMEDIATE = 'Intermediate',
+    EXPERT = 'Expert',
+}
