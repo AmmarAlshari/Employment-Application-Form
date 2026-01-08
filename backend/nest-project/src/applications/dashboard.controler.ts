@@ -3,8 +3,8 @@ import { ApplicationService } from './application.service';
 import { CreateApplicationDto } from './dtos/application.dto';
 import { Controller, Get, Post, Body, Param, Put } from '@nestjs/common';
 
-@Controller('applications')
-export class ApplicationController {
+@Controller('dashboard')
+export class PrivateAppController {
   constructor(private readonly applicationService: ApplicationService) {}
 
   // create a new application

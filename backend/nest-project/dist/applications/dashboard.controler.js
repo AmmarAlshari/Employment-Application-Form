@@ -12,11 +12,11 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ApplicationController = void 0;
+exports.PrivateAppController = void 0;
 const application_service_1 = require("./application.service");
 const application_dto_1 = require("./dtos/application.dto");
 const common_1 = require("@nestjs/common");
-let ApplicationController = class ApplicationController {
+let PrivateAppController = class PrivateAppController {
     applicationService;
     constructor(applicationService) {
         this.applicationService = applicationService;
@@ -34,27 +34,27 @@ let ApplicationController = class ApplicationController {
         return this.applicationService.update(id, updateData);
     }
 };
-exports.ApplicationController = ApplicationController;
+exports.PrivateAppController = PrivateAppController;
 __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [application_dto_1.CreateApplicationDto]),
     __metadata("design:returntype", void 0)
-], ApplicationController.prototype, "create", null);
+], PrivateAppController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
-], ApplicationController.prototype, "findAll", null);
+], PrivateAppController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
-], ApplicationController.prototype, "findOne", null);
+], PrivateAppController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Put)(':id'),
     __param(0, (0, common_1.Param)('id')),
@@ -62,9 +62,9 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", Promise)
-], ApplicationController.prototype, "update", null);
-exports.ApplicationController = ApplicationController = __decorate([
-    (0, common_1.Controller)('applications'),
+], PrivateAppController.prototype, "update", null);
+exports.PrivateAppController = PrivateAppController = __decorate([
+    (0, common_1.Controller)('dashboard'),
     __metadata("design:paramtypes", [application_service_1.ApplicationService])
-], ApplicationController);
-//# sourceMappingURL=application.controller.js.map
+], PrivateAppController);
+//# sourceMappingURL=dashboard.controler.js.map

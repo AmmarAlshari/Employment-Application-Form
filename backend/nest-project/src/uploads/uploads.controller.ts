@@ -44,7 +44,6 @@ export class UploadsController {
   ) {
     if (!file) throw new BadRequestException('CV file is required');
 
-    // This becomes: /storage/cvs/xxxx.pdf
     const resumeUrl = `/storage/cvs/${file.filename}`;
 
     return this.uploadsService.attachCvToApplication(+id, resumeUrl);
