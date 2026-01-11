@@ -89,6 +89,8 @@ export class ApplicationService {
     return this.repo.save(application);
   }
 
+  //find all applications
+
   findAll() {
     return this.repo.find({
       relations: [

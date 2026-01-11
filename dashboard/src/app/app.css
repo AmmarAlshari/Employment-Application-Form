@@ -1,0 +1,8 @@
+body {
+  overflow: hidden; /* Hides both horizontal and vertical scrollbars */
+}
+
+/* Optional: Target the html element as well for broader compatibility */
+html {
+  overflow: hidden;
+}

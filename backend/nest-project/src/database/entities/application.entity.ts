@@ -64,7 +64,7 @@ export class Application {
   @CreateDateColumn()
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @Column({ type: 'date', nullable: true })
   updatedAt: Date;
 
   @Column({
