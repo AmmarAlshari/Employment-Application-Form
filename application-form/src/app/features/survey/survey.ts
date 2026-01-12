@@ -66,7 +66,7 @@ export class SurveyComponent implements OnInit {
 
   surveyForm = new FormGroup({
     name: new FormControl('', Validators.required),
-    nationalId: new FormControl('', [Validators.required, Validators.pattern('^[0-9]{10}$')]),
+    nationalId: new FormControl(''),
     mobile: new FormControl('', [Validators.required, Validators.pattern('^5[0-9]{8}$')]),
     email: new FormControl('', [Validators.required, Validators.email]),
     gender: new FormControl('Male'),
@@ -156,6 +156,8 @@ export class SurveyComponent implements OnInit {
       otherRoleRemarks: raw.isOtherRoleSelected ? raw.otherRoleRemarks || undefined : undefined,
       remarks: raw.remarks || undefined,
     };
+
+    console.log('the payload is here ', payload);
 
     this.http.post(`${enviorments.apiUrl}/applications`, payload).subscribe({
       next: (res: any) => {
