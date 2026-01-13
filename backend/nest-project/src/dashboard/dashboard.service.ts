@@ -37,4 +37,8 @@ export class DashboardUsersService {
   async findUserByEmail(email: string): Promise<DashBoardUser | null> {
     return await this.userRepo.findOneBy({ email });
   }
+
+  async getUsers(): Promise<DashBoardUser[]> {
+    return this.userRepo.find();
+  }
 }

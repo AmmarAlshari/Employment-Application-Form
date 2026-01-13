@@ -6,4 +6,5 @@ export declare class DashboardUsersService {
     constructor(userRepo: Repository<DashBoardUser>);
     createUser(user: CreateDashboardUserDto): Promise<DashBoardUser>;
     findUserByEmail(email: string): Promise<DashBoardUser | null>;
+    getUsers(): Promise<DashBoardUser[]>;
 }
