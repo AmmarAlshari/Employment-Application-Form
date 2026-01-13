@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { enviorments } from '../../../environments/environment';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-signin',
@@ -12,12 +13,10 @@ import { CommonModule } from '@angular/common';
   styleUrl: './signin.css',
 })
 export class Signin {
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router, private auth: AuthService) {}
   email = '';
   password = '';
   errorMessage = signal<string>('');
-
-  
 
   login() {
     this.errorMessage.set('');
@@ -28,7 +27,7 @@ export class Signin {
       })
       .subscribe({
         next: (res: any) => {
-          localStorage.setItem('token', res.access_token);
+          this.auth.setToken(res.access_token);
           this.router.navigate(['/dashboard']);
         },
         error: (err) => {

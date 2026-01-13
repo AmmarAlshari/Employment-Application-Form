@@ -17,8 +17,10 @@ export class Application implements OnInit {
   openApplicationId = signal<number | null>(null);
   editingApplicationId = signal<number | null>(null);
 
-  // NEW: keep original values
   originalStatuses = new Map<number, string>();
+
+  // NEW: track saved updates
+  updatedIds = signal<Set<number>>(new Set());
 
   options = ['NEW', 'UNDER_REVIEW', 'INTERVIEW', 'ACCEPTED', 'REJECTED'];
 
@@ -31,7 +33,6 @@ export class Application implements OnInit {
       next: (res: any) => {
         this.applications.set(res.applications);
 
-        // store original statuses
         res.applications.forEach((app: any) => {
           this.originalStatuses.set(app.id, app.ApplicationStatus);
         });
@@ -70,25 +71,47 @@ export class Application implements OnInit {
     this.editingApplicationId.set(null);
   }
 
-  // NEW: detect unsaved changes
   hasUnsavedChanges(): boolean {
     return this.applications().some(
       (app) => this.originalStatuses.get(app.id) !== app.ApplicationStatus
     );
   }
 
-  // NEW: save all changes
   saveAll() {
-    const payload = this.applications()
-      .filter((app) => this.originalStatuses.get(app.id) !== app.ApplicationStatus)
-      .map((app) => ({
-        id: app.id,
-        status: app.ApplicationStatus,
-      }));
+    const changedApps = this.applications().filter(
+      (app) => this.originalStatuses.get(app.id) !== app.ApplicationStatus
+    );
+
+    const payload = changedApps.map((app) => ({
+      id: app.id,
+      status: app.ApplicationStatus,
+    }));
 
     console.log(payload);
+
+    // commit changes
+    changedApps.forEach((app) => {
+      this.originalStatuses.set(app.id, app.ApplicationStatus);
+    });
+
+    // mark updated rows
+    this.updatedIds.set(new Set(changedApps.map((app) => app.id)));
   }
 
+  cancelAll() {
+    // reset statuses to original values
+    this.applications().forEach((app) => {
+      const original = this.originalStatuses.get(app.id);
+      if (original !== undefined) {
+        app.ApplicationStatus = original;
+      }
+    });
+
+    // clear UI state
+    this.updatedIds.set(new Set());
+    this.openApplicationId.set(null);
+    this.editingApplicationId.set(null);
+  }
   getStatusClass(status: string): string {
     switch (status) {
       case 'NEW':

@@ -4,16 +4,6 @@
       <h3 class="text-lg leading-6 font-medium text-gray-900">Applications</h3>
       <p class="mt-1 max-w-2xl text-sm text-gray-500">List of application submissions.</p>
     </div>
-
-    <!-- SAVE BUTTON (NEW) -->
-    <button
-      type="button"
-      class="text-white bg-green-700 px-6 py-2 rounded-full text-sm font-medium m-3"
-      (click)="saveAll()"
-      *ngIf="hasUnsavedChanges()"
-    >
-      Save Changes
-    </button>
   </div>
 
   <div class="px-4 py-3 sm:px-6">
@@ -25,6 +15,22 @@
           [(ngModel)]="searchTerm"
           class="block w-90 px-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
         />
+        <button
+          type="button"
+          class="text-gray-700 bg-gray-200 px-6 py-2 rounded-full text-sm font-medium cursor-pointer"
+          (click)="cancelAll()"
+          *ngIf="hasUnsavedChanges()"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="text-white bg-green-700 px-6 py-2 rounded-full text-sm font-medium m-3 cursor-pointer"
+          (click)="saveAll()"
+          *ngIf="hasUnsavedChanges()"
+        >
+          Save Changes
+        </button>
       </div>
     </div>
   </div>
@@ -55,10 +61,27 @@
           *ngFor="let application of filteredApplications(); let i = index"
           class="hover:bg-gray-50"
         >
-          <td class="px-4 py-4 text-sm font-medium text-gray-900">{{ i + 1 }}</td>
-          <td class="px-4 py-4 text-sm font-medium text-gray-900">{{ application.name }}</td>
-          <td class="px-4 py-4 text-sm text-gray-500">{{ application.mobile }}</td>
-          <td class="px-4 py-4 text-sm text-gray-500">{{ application.email }}</td>
+          <td class="px-7 py-4 text-sm font-medium text-gray-900">
+            {{ i + 1 }}
+
+            <!-- NEW: Updated label -->
+            <span
+              *ngIf="updatedIds().has(application.id)"
+              class="ml-2 px-2 py-0.5 text-xs rounded-full bg-yellow-100 text-yellow-800"
+            >
+              Updated
+            </span>
+          </td>
+
+          <td class="px-4 py-4 text-sm font-medium text-gray-900">
+            {{ application.name }}
+          </td>
+          <td class="px-4 py-4 text-sm text-gray-500">
+            {{ application.mobile }}
+          </td>
+          <td class="px-4 py-4 text-sm text-gray-500">
+            {{ application.email }}
+          </td>
           <td class="px-4 py-4 text-sm text-gray-500">
             {{ application.nationality?.countryName || 'Not Entered' }}
           </td>

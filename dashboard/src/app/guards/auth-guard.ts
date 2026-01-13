@@ -1,4 +1,4 @@
-import { CanActivateChildFn, CanActivateFn, Router } from '@angular/router';
+import { CanActivateChildFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
 
 function decodeToken(token: string): any | null {
@@ -10,7 +10,7 @@ function decodeToken(token: string): any | null {
   }
 }
 
-export const authGuard: CanActivateChildFn  = (route) => {
+export const authGuard: CanActivateChildFn = (route) => {
   const router = inject(Router);
 
   const token = localStorage.getItem('token');
@@ -40,9 +40,15 @@ export const authGuard: CanActivateChildFn  = (route) => {
   // 4️⃣ Role check (if route defines roles)
   const allowedRoles = route.data?.['roles'] as string[] | undefined;
   if (allowedRoles && !allowedRoles.includes(decoded.role)) {
+    console.log(decoded.role);
     router.navigate(['/unauthorized']);
     return false;
   }
+
+  // if (router.url === '/auth/signin') {
+  //   localStorage.removeItem('token');
+  //   return true
+  // }
 
   // 5️⃣ All good
   return true;
