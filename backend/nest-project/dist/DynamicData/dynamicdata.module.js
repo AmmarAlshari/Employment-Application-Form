@@ -9,17 +9,38 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DynamicDataModule = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
-const entities_1 = require("../database/entities");
-const dynamicdata_service_1 = require("./dynamicdata.service");
-const dynamicdata_controler_1 = require("./dynamicdata.controler");
+const cities_entity_1 = require("../database/entities/cities.entity");
+const nationality_entity_1 = require("../database/entities/nationality.entity");
+const qaualification_entity_1 = require("../database/entities/qaualification.entity");
+const selectedrole_entity_1 = require("../database/entities/selectedrole.entity");
+const city_controller_1 = require("./city/city.controller");
+const nationality_controller_1 = require("./nationality/nationality.controller");
+const roles_controller_1 = require("./roles/roles.controller");
+const qualifications_controller_1 = require("./qualifications/qualifications.controller");
+const city_service_1 = require("./city/city.service");
+const nationality_service_1 = require("./nationality/nationality.service");
+const roles_service_1 = require("./roles/roles.service");
+const qualifications_service_1 = require("./qualifications/qualifications.service");
 let DynamicDataModule = class DynamicDataModule {
 };
 exports.DynamicDataModule = DynamicDataModule;
 exports.DynamicDataModule = DynamicDataModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature(entities_1.entities)],
-        controllers: [dynamicdata_controler_1.LookupsController],
-        providers: [dynamicdata_service_1.LookupsService],
+        imports: [
+            typeorm_1.TypeOrmModule.forFeature([cities_entity_1.City, nationality_entity_1.Nationality, qaualification_entity_1.Qualification, selectedrole_entity_1.SelectedRole]),
+        ],
+        controllers: [
+            city_controller_1.CityController,
+            nationality_controller_1.NationalityController,
+            roles_controller_1.RolesController,
+            qualifications_controller_1.QualificationsController,
+        ],
+        providers: [
+            city_service_1.CityService,
+            nationality_service_1.NationalityService,
+            roles_service_1.RolesService,
+            qualifications_service_1.QualificationsService,
+        ],
     })
 ], DynamicDataModule);
 //# sourceMappingURL=dynamicdata.module.js.map

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import {
@@ -27,10 +27,10 @@ export class SurveyComponent implements OnInit {
     this.isArabic = path.includes('Ar');
   }
 
-  cities: City[] = [];
-  nationalities: Nationality[] = [];
-  selectedRoles: SelectedRole[] = [];
-  qualifications: Qualification[] = [];
+  cities = signal<any[]>([]);
+  nationalities = signal<any[]>([]);
+  roles = signal<any[]>([]);
+  qualifications = signal<any[]>([]);
 
   ngOnInit(): void {
     forkJoin({
@@ -41,10 +41,10 @@ export class SurveyComponent implements OnInit {
     }).subscribe({
       next: (res) => {
         console.log(res);
-        this.cities = res.cities;
-        this.nationalities = res.nationalities;
-        this.selectedRoles = res.roles;
-        this.qualifications = res.qualifications;
+        this.cities.set(res.cities);
+        this.nationalities.set(res.nationalities);
+        this.roles.set(res.roles);
+        this.qualifications.set(res.qualifications);
       },
       error: (err) => console.error(err),
     });

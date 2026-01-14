@@ -12,12 +12,26 @@ export class DataService {
 
   constructor(private http: HttpClient) {}
 
-  getUsers(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/dashboard`).pipe(
+  getApplications(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/ApplicationDashboard`).pipe(
       map((response) => response),
-      catchError(this.handleError)
+      // catchError(this.handleError)
     );
   }
+
+  getUsers(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/dashboard/users`).pipe(
+      map((response) => response),
+      // catchError(this.handleError)
+    );
+  }
+  createUser(data: any): Observable<any[]> {
+    return this.http.post<any[]>(`${this.apiUrl}/dashboard/create/users`, data).pipe(
+      map((response) => response),
+      // catchError(this.handleError)
+    );
+  }
+
 
   private handleError(error: HttpErrorResponse) {
     console.error('An error occurred:', error.error);

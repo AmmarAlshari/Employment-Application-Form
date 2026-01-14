@@ -42,6 +42,40 @@ export const routes: Routes = [
         loadComponent: () => import('./components/users/users').then((m) => m.Users),
         data: { roles: ['ADMIN'] },
       },
+
+      {
+        path: 'datatable',
+        data: { roles: ['ADMIN'] },
+        children: [
+          {
+            path: 'cities',
+            loadComponent: () =>
+              import('./components/datatable/cities/cities').then((m) => m.Cities),
+          },
+          {
+            path: 'nationalities',
+            loadComponent: () =>
+              import('./components/datatable/nationalities/nationalities').then(
+                (m) => m.Nationalities
+              ),
+          },
+          {
+            path: 'roles',
+            loadComponent: () =>
+              import('./components/datatable/selected-roles/selected-roles').then(
+                (m) => m.SelectedRole
+              ),
+          },
+          {
+            path: 'qualifications',
+            loadComponent: () =>
+              import('./components/datatable/qualifications/qualifications').then(
+                (m) => m.Qualification
+              ),
+          },
+        ],
+      },
+
       {
         path: 'unauthorized',
         loadComponent: () =>

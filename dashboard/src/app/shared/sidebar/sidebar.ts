@@ -22,4 +22,10 @@ export class Sidebar {
     this.auth.logout();
     this.router.navigate(['/auth/signin']);
   }
+
+  dataTableOpen = false;
+
+  toggleDataTable() {
+    this.dataTableOpen = !this.dataTableOpen;
+  }
 }

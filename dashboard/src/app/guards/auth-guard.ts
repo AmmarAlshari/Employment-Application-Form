@@ -4,7 +4,7 @@ import { inject } from '@angular/core';
 function decodeToken(token: string): any | null {
   try {
     const payload = token.split('.')[1];
-    return JSON.parse(atob(payload));
+    return console.log(JSON.parse(atob(payload))), JSON.parse(atob(payload));
   } catch {
     return null;
   }
@@ -15,13 +15,13 @@ export const authGuard: CanActivateChildFn = (route) => {
 
   const token = localStorage.getItem('token');
 
-  // 1️⃣ No token → go to login
+  //  No token → go to login
   if (!token) {
     router.navigate(['/auth/signin']);
     return false;
   }
 
-  // 2️⃣ Decode token
+  //  Decode token
   const decoded = decodeToken(token);
   if (!decoded) {
     localStorage.removeItem('token');
@@ -29,7 +29,7 @@ export const authGuard: CanActivateChildFn = (route) => {
     return false;
   }
 
-  // 3️⃣ (Optional but recommended) check expiration
+  //  (Optional but recommended) check expiration
   const now = Math.floor(Date.now() / 1000);
   if (decoded.exp && decoded.exp < now) {
     localStorage.removeItem('token');
@@ -37,7 +37,7 @@ export const authGuard: CanActivateChildFn = (route) => {
     return false;
   }
 
-  // 4️⃣ Role check (if route defines roles)
+  // Role check (if route defines roles)
   const allowedRoles = route.data?.['roles'] as string[] | undefined;
   if (allowedRoles && !allowedRoles.includes(decoded.role)) {
     console.log(decoded.role);
@@ -50,6 +50,6 @@ export const authGuard: CanActivateChildFn = (route) => {
   //   return true
   // }
 
-  // 5️⃣ All good
+  //  All good
   return true;
 };

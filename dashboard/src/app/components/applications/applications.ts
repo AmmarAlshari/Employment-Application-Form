@@ -28,7 +28,7 @@ export class Application implements OnInit {
 
   ngOnInit() {
     forkJoin({
-      applications: this.dataService.getUsers(),
+      applications: this.dataService.getApplications(),
     }).subscribe({
       next: (res: any) => {
         this.applications.set(res.applications);
@@ -88,6 +88,8 @@ export class Application implements OnInit {
     }));
 
     console.log(payload);
+
+    // sending post to backend here
 
     // commit changes
     changedApps.forEach((app) => {

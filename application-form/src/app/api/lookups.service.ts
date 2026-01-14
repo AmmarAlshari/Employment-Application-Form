@@ -33,15 +33,15 @@ export class LookupsService {
   constructor(private http: HttpClient) {}
 
   getCities(): Observable<City[]> {
-    return this.http.get<City[]>(`${this.base}/lookups/cities`);
+    return this.http.get<City[]>(`${this.base}/cities`);
   }
   getNationalities(): Observable<Nationality[]> {
-    return this.http.get<Nationality[]>(`${this.base}/lookups/nationalities`);
+    return this.http.get<Nationality[]>(`${this.base}/nationalities`);
   }
   getSelectedRoles(): Observable<SelectedRole[]> {
-    return this.http.get<SelectedRole[]>(`${this.base}/lookups/selected-roles`);
+    return this.http.get<SelectedRole[]>(`${this.base}/roles`);
   }
   getQualifications(): Observable<Qualification[]> {
-    return this.http.get<Qualification[]>(`${this.base}/lookups/qualifications`);
+    return this.http.get<Qualification[]>(`${this.base}/qualifications`);
   }
 }
