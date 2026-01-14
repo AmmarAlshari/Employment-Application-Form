@@ -3,6 +3,7 @@ import { City } from '../database/entities/cities.entity';
 import { Nationality } from '../database/entities/nationality.entity';
 import { SelectedRole } from '../database/entities/selectedrole.entity';
 import { Qualification } from '../database/entities/qaualification.entity';
+import { CreateCityDto } from './dto/createCity.dto';
 export declare class LookupsService {
     private readonly cityRepo;
     private readonly natRepo;
@@ -13,4 +14,5 @@ export declare class LookupsService {
     getNationalities(): Promise<Nationality[]>;
     getRoles(): Promise<SelectedRole[]>;
     getQualifications(): Promise<Qualification[]>;
+    createCity(data: CreateCityDto): Promise<City>;
 }

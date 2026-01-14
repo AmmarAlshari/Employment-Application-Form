@@ -5,9 +5,9 @@ export class City {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({nullable: false})
   cityName: string;
 
-  @Column()
+  @Column({nullable: false})
   cityNameAr: string;
 }

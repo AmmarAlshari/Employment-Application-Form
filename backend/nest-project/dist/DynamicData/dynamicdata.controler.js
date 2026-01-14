@@ -8,10 +8,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LookupsController = void 0;
 const common_1 = require("@nestjs/common");
 const dynamicdata_service_1 = require("./dynamicdata.service");
+const createCity_dto_1 = require("./dto/createCity.dto");
 let LookupsController = class LookupsController {
     LookupsService;
     constructor(LookupsService) {
@@ -28,6 +32,9 @@ let LookupsController = class LookupsController {
     }
     getQualifications() {
         return this.LookupsService.getQualifications();
+    }
+    createCity(dto) {
+        return this.LookupsService.createCity(dto);
     }
 };
 exports.LookupsController = LookupsController;
@@ -55,6 +62,13 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], LookupsController.prototype, "getQualifications", null);
+__decorate([
+    (0, common_1.Post)('cities/create'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [createCity_dto_1.CreateCityDto]),
+    __metadata("design:returntype", void 0)
+], LookupsController.prototype, "createCity", null);
 exports.LookupsController = LookupsController = __decorate([
     (0, common_1.Controller)('lookups'),
     __metadata("design:paramtypes", [dynamicdata_service_1.LookupsService])

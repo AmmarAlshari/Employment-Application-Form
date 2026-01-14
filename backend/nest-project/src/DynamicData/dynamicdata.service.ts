@@ -5,6 +5,7 @@ import { City } from '../database/entities/cities.entity';
 import { Nationality } from '../database/entities/nationality.entity';
 import { SelectedRole } from '../database/entities/selectedrole.entity';
 import { Qualification } from '../database/entities/qaualification.entity';
+import { CreateCityDto } from './dto/createCity.dto';
 
 @Injectable()
 export class LookupsService {
@@ -32,4 +33,13 @@ export class LookupsService {
   getQualifications() {
     return this.qualRepo.find();
   }
+
+  async createCity(data: CreateCityDto) {
+    const city = this.cityRepo.create(data);
+    return await this.cityRepo.save(city);
+  }
+
+  // async updateCity (id: number){
+
+  // }
 }

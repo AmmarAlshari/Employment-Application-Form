@@ -43,6 +43,10 @@ let LookupsService = class LookupsService {
     getQualifications() {
         return this.qualRepo.find();
     }
+    async createCity(data) {
+        const city = this.cityRepo.create(data);
+        return await this.cityRepo.save(city);
+    }
 };
 exports.LookupsService = LookupsService;
 exports.LookupsService = LookupsService = __decorate([

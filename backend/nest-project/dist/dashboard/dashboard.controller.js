@@ -25,49 +25,31 @@ let DashboardController = class DashboardController {
     constructor(createRepo) {
         this.createRepo = createRepo;
     }
-    signup(dto) {
+    createUser(dto) {
         return this.createRepo.createUser(dto);
     }
     getUsers() {
         return this.createRepo.getUsers();
     }
-    adminOnly() {
-        return 'Admin Only ';
-    }
-    hrOnly() {
-        return 'HR Only ';
-    }
 };
 exports.DashboardController = DashboardController;
 __decorate([
+    (0, common_1.UseGuards)(auth_gaurd_1.JwtAuthGuard, role_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(userroles_enum_1.UserRoles.ADMIN),
     (0, common_1.Post)('create/users'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_user_dto_1.CreateDashboardUserDto]),
     __metadata("design:returntype", void 0)
-], DashboardController.prototype, "signup", null);
+], DashboardController.prototype, "createUser", null);
 __decorate([
+    (0, common_1.UseGuards)(auth_gaurd_1.JwtAuthGuard, role_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(userroles_enum_1.UserRoles.ADMIN),
     (0, common_1.Get)('users'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], DashboardController.prototype, "getUsers", null);
-__decorate([
-    (0, common_1.UseGuards)(auth_gaurd_1.JwtAuthGuard, role_guard_1.RolesGuard),
-    (0, roles_decorator_1.Roles)(userroles_enum_1.UserRoles.ADMIN),
-    (0, common_1.Get)('admin-only'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], DashboardController.prototype, "adminOnly", null);
-__decorate([
-    (0, common_1.UseGuards)(auth_gaurd_1.JwtAuthGuard, role_guard_1.RolesGuard),
-    (0, roles_decorator_1.Roles)(userroles_enum_1.UserRoles.HR),
-    (0, common_1.Get)('hr-only'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], DashboardController.prototype, "hrOnly", null);
 exports.DashboardController = DashboardController = __decorate([
     (0, common_1.Controller)('dashboard'),
     __metadata("design:paramtypes", [dashboard_service_1.DashboardUsersService])
