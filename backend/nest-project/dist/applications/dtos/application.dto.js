@@ -39,7 +39,6 @@ __decorate([
 ], CreateApplicationDto.prototype, "name", void 0);
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.Length)(10, 10),
     __metadata("design:type", String)
 ], CreateApplicationDto.prototype, "nationalId", void 0);
 __decorate([

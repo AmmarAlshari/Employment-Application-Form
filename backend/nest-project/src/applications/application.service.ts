@@ -28,6 +28,7 @@ export class ApplicationService {
       mobile: data.mobile,
       email: data.email,
       gender: data.gender,
+      nationalId: data.nationalId,
       experienceLevel: data.experienceLevel,
       isFreshGraduate: data.isFreshGraduate ?? false,
       major: data.major,

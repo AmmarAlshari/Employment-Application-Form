@@ -39,9 +39,10 @@ const common_1 = require("@nestjs/common");
 const express = __importStar(require("express"));
 const path_1 = require("path");
 async function bootstrap() {
+    const allowedOrigins = ['http://localhost:4200', 'http://localhost:4201'];
     const app = await core_1.NestFactory.create(app_module_1.AppModule, {
         cors: {
-            origin: 'http://localhost:4200',
+            origin: allowedOrigins,
             methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
             allowedHeaders: 'Content-Type, Authorization',
         },

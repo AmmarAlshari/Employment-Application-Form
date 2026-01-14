@@ -22,11 +22,11 @@ __decorate([
     __metadata("design:type", Number)
 ], City.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ nullable: false }),
     __metadata("design:type", String)
 ], City.prototype, "cityName", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ nullable: false }),
     __metadata("design:type", String)
 ], City.prototype, "cityNameAr", void 0);
 exports.City = City = __decorate([

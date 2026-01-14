@@ -103,7 +103,7 @@ __decorate([
     __metadata("design:type", Date)
 ], Application.prototype, "createdAt", void 0);
 __decorate([
-    (0, typeorm_1.UpdateDateColumn)(),
+    (0, typeorm_1.Column)({ type: 'date', nullable: true }),
     __metadata("design:type", Date)
 ], Application.prototype, "updatedAt", void 0);
 __decorate([

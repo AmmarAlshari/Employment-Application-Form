@@ -64,7 +64,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], PrivateAppController.prototype, "update", null);
 exports.PrivateAppController = PrivateAppController = __decorate([
-    (0, common_1.Controller)('dashboard'),
+    (0, common_1.Controller)('ApplicationDashboard'),
     __metadata("design:paramtypes", [application_service_1.ApplicationService])
 ], PrivateAppController);
 //# sourceMappingURL=dashboard.controler.js.map

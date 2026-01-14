@@ -17,7 +17,6 @@ export class CreateApplicationDto {
   name: string;
 
   @IsNotEmpty()
-  @Length(10, 10)
   nationalId: string;
 
   @IsNotEmpty()

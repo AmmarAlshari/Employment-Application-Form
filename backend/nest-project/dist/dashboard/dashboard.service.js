@@ -73,6 +73,9 @@ let DashboardUsersService = class DashboardUsersService {
     async findUserByEmail(email) {
         return await this.userRepo.findOneBy({ email });
     }
+    async getUsers() {
+        return this.userRepo.find();
+    }
 };
 exports.DashboardUsersService = DashboardUsersService;
 exports.DashboardUsersService = DashboardUsersService = __decorate([

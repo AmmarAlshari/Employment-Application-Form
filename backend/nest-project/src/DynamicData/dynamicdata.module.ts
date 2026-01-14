@@ -1,12 +1,33 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { entities } from '../database/entities';
-import { LookupsService } from './dynamicdata.service';
-import { LookupsController } from './dynamicdata.controler';
+import { City } from 'src/database/entities/cities.entity';
+import { Nationality } from 'src/database/entities/nationality.entity';
+import { Qualification } from 'src/database/entities/qaualification.entity';
+import { SelectedRole } from 'src/database/entities/selectedrole.entity';
+import { CityController } from './city/city.controller';
+import { NationalityController } from './nationality/nationality.controller';
+import { RolesController } from './roles/roles.controller';
+import { QualificationsController } from './qualifications/qualifications.controller';
+import { CityService } from './city/city.service';
+import { NationalityService } from './nationality/nationality.service';
+import { RolesService } from './roles/roles.service';
+import { QualificationsService } from './qualifications/qualifications.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature(entities)],
-  controllers: [LookupsController],
-  providers: [LookupsService],
+  imports: [
+    TypeOrmModule.forFeature([City, Nationality, Qualification, SelectedRole]),
+  ],
+  controllers: [
+    CityController,
+    NationalityController,
+    RolesController,
+    QualificationsController,
+  ],
+  providers: [
+    CityService,
+    NationalityService,
+    RolesService,
+    QualificationsService,
+  ],
 })
 export class DynamicDataModule {}

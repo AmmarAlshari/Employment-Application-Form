@@ -5,9 +5,11 @@ import * as express from 'express';
 import { join } from 'path';
 
 async function bootstrap() {
+
+  const allowedOrigins = ['http://localhost:4200', 'http://localhost:4201']; 
   const app = await NestFactory.create(AppModule, {
     cors: {
-      origin: 'http://localhost:4200',
+      origin: allowedOrigins,
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
       allowedHeaders: 'Content-Type, Authorization',
     },
