@@ -36,7 +36,7 @@ exports.DashboardController = DashboardController;
 __decorate([
     (0, common_1.UseGuards)(auth_gaurd_1.JwtAuthGuard, role_guard_1.RolesGuard),
     (0, roles_decorator_1.Roles)(userroles_enum_1.UserRoles.ADMIN),
-    (0, common_1.Post)('create/users'),
+    (0, common_1.Post)('users'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_user_dto_1.CreateDashboardUserDto]),

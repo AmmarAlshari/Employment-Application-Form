@@ -7,6 +7,7 @@ import { Nationality } from '../database/entities/nationality.entity';
 import { SelectedRole } from '../database/entities/selectedrole.entity';
 import { CreateApplicationDto } from './dtos/application.dto';
 import { Qualification } from '../database/entities/qaualification.entity';
+import { Status } from 'src/database/entities/status.entity';
 
 @Injectable()
 export class ApplicationService {
@@ -17,6 +18,8 @@ export class ApplicationService {
     @InjectRepository(SelectedRole) private roleRepo: Repository<SelectedRole>,
     @InjectRepository(Qualification)
     private qualRepo: Repository<Qualification>,
+    @InjectRepository(Status)
+    private statusRepo: Repository<Status>,
   ) {}
 
   async create(data: CreateApplicationDto) {
@@ -37,6 +40,14 @@ export class ApplicationService {
       otherRoleRemarks: data.otherRoleRemarks,
       remarks: data.remarks,
     });
+
+    const defaultStatus = await this.statusRepo.findOneBy({ status: 'NEW' });
+
+    if (!defaultStatus) {
+      throw new NotFoundException('default new not found');
+    }
+
+    application.ApplicationStatus = defaultStatus;
 
     const nationality = await this.natRepo.findOneBy({
       id: data.nationalityId,
@@ -99,6 +110,7 @@ export class ApplicationService {
         'nationality',
         'selectedRoles',
         'qualification',
+        'ApplicationStatus',
       ],
     });
   }
@@ -113,6 +125,7 @@ export class ApplicationService {
         'nationality',
         'selectedRoles',
         'qualification',
+        'ApplicationStatus',
       ],
     });
 
@@ -124,8 +137,24 @@ export class ApplicationService {
   }
 
   // update an application by ID
-  async update(id: number, data: Partial<Application>) {
-    await this.repo.update(id, data);
-    return this.findOne(id);
+  async updateApplicationStatus(applicationId: number, statusId: number) {
+    const application = await this.repo.findOne({
+      where: { id: applicationId },
+      relations: ['ApplicationStatus'],
+    });
+
+    if (!application) {
+      throw new NotFoundException('Application not found');
+    }
+
+    const status = await this.statusRepo.findOneBy({ id: statusId });
+
+    if (!status) {
+      throw new NotFoundException('Status not found');
+    }
+
+    application.ApplicationStatus = status;
+
+    return this.repo.save(application);
   }
 }

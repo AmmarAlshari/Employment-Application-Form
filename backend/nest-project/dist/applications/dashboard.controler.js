@@ -30,8 +30,8 @@ let PrivateAppController = class PrivateAppController {
     findOne(id) {
         return this.applicationService.findOne(id);
     }
-    update(id, updateData) {
-        return this.applicationService.update(id, updateData);
+    updateStatus(id, body) {
+        return this.applicationService.updateApplicationStatus(id, body.statusId);
     }
 };
 exports.PrivateAppController = PrivateAppController;
@@ -56,13 +56,13 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], PrivateAppController.prototype, "findOne", null);
 __decorate([
-    (0, common_1.Put)(':id'),
+    (0, common_1.Put)(':id/status'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", Promise)
-], PrivateAppController.prototype, "update", null);
+], PrivateAppController.prototype, "updateStatus", null);
 exports.PrivateAppController = PrivateAppController = __decorate([
     (0, common_1.Controller)('ApplicationDashboard'),
     __metadata("design:paramtypes", [application_service_1.ApplicationService])

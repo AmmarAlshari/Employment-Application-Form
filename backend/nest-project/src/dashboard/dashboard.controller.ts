@@ -13,7 +13,7 @@ export class DashboardController {
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRoles.ADMIN)
-  @Post('create/users')
+  @Post('users')
   createUser(@Body() dto: CreateDashboardUserDto) {
     return this.createRepo.createUser(dto);
   }
@@ -24,17 +24,4 @@ export class DashboardController {
   getUsers(): Promise<DashBoardUser[]> {
     return this.createRepo.getUsers();
   }
-
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Roles(UserRoles.ADMIN)
-  // @Get('admin-only')
-  // adminOnly() {
-  //   return 'Admin Only ';
-  // }
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Roles(UserRoles.HR)
-  // @Get('hr-only')
-  // hrOnly() {
-  //   return 'HR Only ';
-  // }
 }

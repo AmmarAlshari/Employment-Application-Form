@@ -4,7 +4,7 @@ import { Nationality } from './nationality.entity';
 import { Qualification } from './qaualification.entity';
 import { Gender } from 'src/common/enums/gender.enum';
 import { EnglishLevel } from 'src/common/enums/englishlevel.enum';
-import { ApplicationStatus } from 'src/common/enums/application-status.enum';
+import { Status } from './status.entity';
 export declare class Application {
     id: number;
     name: string;
@@ -22,9 +22,9 @@ export declare class Application {
     resumeUrl?: string;
     createdAt: Date;
     updatedAt: Date;
-    ApplicationStatus: ApplicationStatus;
     selectedRoles: SelectedRole[];
     favoriteCity?: City;
     nationality?: Nationality;
     qualification?: Qualification;
+    ApplicationStatus?: Status;
 }

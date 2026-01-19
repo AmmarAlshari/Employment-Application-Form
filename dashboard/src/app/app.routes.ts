@@ -56,22 +56,27 @@ export const routes: Routes = [
             path: 'nationalities',
             loadComponent: () =>
               import('./components/datatable/nationalities/nationalities').then(
-                (m) => m.Nationalities
+                (m) => m.Nationalities,
               ),
           },
           {
             path: 'roles',
             loadComponent: () =>
               import('./components/datatable/selected-roles/selected-roles').then(
-                (m) => m.SelectedRole
+                (m) => m.SelectedRole,
               ),
           },
           {
             path: 'qualifications',
             loadComponent: () =>
               import('./components/datatable/qualifications/qualifications').then(
-                (m) => m.Qualification
+                (m) => m.Qualification,
               ),
+          },
+          {
+            path: 'status',
+            loadComponent: () =>
+              import('./components/datatable/status/status').then((m) => m.Status),
           },
         ],
       },

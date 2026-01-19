@@ -7,5 +7,7 @@ export declare class PrivateAppController {
     create(data: CreateApplicationDto): Promise<Application>;
     findAll(): Promise<Application[]>;
     findOne(id: number): Promise<Application>;
-    update(id: number, updateData: Partial<CreateApplicationDto>): Promise<Application>;
+    updateStatus(id: number, body: {
+        statusId: number;
+    }): Promise<Application>;
 }

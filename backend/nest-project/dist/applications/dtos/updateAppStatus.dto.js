@@ -9,15 +9,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdateApplicationStatus = void 0;
+exports.UpdateApplicationDto = void 0;
 const class_validator_1 = require("class-validator");
-const application_service_1 = require("../application.service");
-class UpdateApplicationStatus {
-    applicationStatus;
+class UpdateApplicationDto {
+    statusId;
 }
-exports.UpdateApplicationStatus = UpdateApplicationStatus;
+exports.UpdateApplicationDto = UpdateApplicationDto;
 __decorate([
-    (0, class_validator_1.IsEnum)(application_service_1.ApplicationService),
-    __metadata("design:type", application_service_1.ApplicationService)
-], UpdateApplicationStatus.prototype, "applicationStatus", void 0);
+    (0, class_validator_1.IsInt)(),
+    __metadata("design:type", Number)
+], UpdateApplicationDto.prototype, "statusId", void 0);
 //# sourceMappingURL=updateAppStatus.dto.js.map

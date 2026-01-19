@@ -28,11 +28,11 @@ export class PrivateAppController {
 
   // update an application by ID
 
-  @Put(':id')
-  update(
+  @Put(':id/status')
+  updateStatus(
     @Param('id') id: number,
-    @Body() updateData: Partial<CreateApplicationDto>,
+    @Body() body: { statusId: number },
   ): Promise<Application> {
-    return this.applicationService.update(id, updateData);
+    return this.applicationService.updateApplicationStatus(id, body.statusId);
   }
 }

@@ -18,6 +18,17 @@ export class DataService {
       // catchError(this.handleError)
     );
   }
+  deletApplications(): Observable<any[]> {
+    return this.http.delete<any[]>(`${this.apiUrl}/ApplicationDashboard`).pipe(
+      map((response) => response),
+      // catchError(this.handleError)
+    );
+  }
+  updateApplicationStatus(applicationId: number, statusId: number) {
+    return this.http.put(`${this.apiUrl}/ApplicationDashboard/${applicationId}/status`, {
+      statusId,
+    });
+  }
 
   getUsers(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/dashboard/users`).pipe(
@@ -31,7 +42,6 @@ export class DataService {
       // catchError(this.handleError)
     );
   }
-
 
   private handleError(error: HttpErrorResponse) {
     console.error('An error occurred:', error.error);

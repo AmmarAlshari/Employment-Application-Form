@@ -12,22 +12,33 @@ import { CityService } from './city/city.service';
 import { NationalityService } from './nationality/nationality.service';
 import { RolesService } from './roles/roles.service';
 import { QualificationsService } from './qualifications/qualifications.service';
+import { StatusService } from './status/status.service';
+import { StatusController } from './status/status.controller';
+import { Status } from 'src/database/entities/status.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([City, Nationality, Qualification, SelectedRole]),
+    TypeOrmModule.forFeature([
+      City,
+      Nationality,
+      Qualification,
+      SelectedRole,
+      Status,
+    ]),
   ],
   controllers: [
     CityController,
     NationalityController,
     RolesController,
     QualificationsController,
+    StatusController,
   ],
   providers: [
     CityService,
     NationalityService,
     RolesService,
     QualificationsService,
+    StatusService,
   ],
 })
 export class DynamicDataModule {}

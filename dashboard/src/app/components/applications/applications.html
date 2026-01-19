@@ -7,31 +7,32 @@
   </div>
 
   <div class="px-4 py-3 sm:px-6">
-    <div class="flex items-center">
-      <div class="flex-1 flex-row">
-        <input
-          type="text"
-          placeholder="Search applications..."
-          [(ngModel)]="searchTerm"
-          class="block w-90 px-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
-        />
-        <button
-          type="button"
-          class="text-gray-700 bg-gray-200 px-6 py-2 rounded-full text-sm font-medium cursor-pointer"
-          (click)="cancelAll()"
-          *ngIf="hasUnsavedChanges()"
-        >
-          Cancel
-        </button>
-        <button
-          type="button"
-          class="text-white bg-green-700 px-6 py-2 rounded-full text-sm font-medium m-3 cursor-pointer"
-          (click)="saveAll()"
-          *ngIf="hasUnsavedChanges()"
-        >
-          Save Changes
-        </button>
-      </div>
+    <div class="flex items-center gap-3">
+      <input
+        type="text"
+        placeholder="Search applications..."
+        [ngModel]="searchTerm()"
+        (ngModelChange)="searchTerm.set($event)"
+        class="block w-90 px-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
+      />
+
+      <button
+        type="button"
+        class="text-gray-700 bg-gray-200 px-6 py-2 rounded-full text-sm font-medium cursor-pointer"
+        (click)="cancelAll()"
+        *ngIf="hasUnsavedChanges()"
+      >
+        Cancel
+      </button>
+
+      <button
+        type="button"
+        class="text-white bg-green-700 px-6 py-2 rounded-full text-sm font-medium cursor-pointer"
+        (click)="saveAll()"
+        *ngIf="hasUnsavedChanges()"
+      >
+        Save Changes
+      </button>
     </div>
   </div>
 
@@ -63,8 +64,6 @@
         >
           <td class="px-7 py-4 text-sm font-medium text-gray-900">
             {{ i + 1 }}
-
-            <!-- NEW: Updated label -->
             <span
               *ngIf="updatedIds().has(application.id)"
               class="ml-2 px-2 py-0.5 text-xs rounded-full bg-yellow-100 text-yellow-800"
@@ -76,26 +75,30 @@
           <td class="px-4 py-4 text-sm font-medium text-gray-900">
             {{ application.name }}
           </td>
+
           <td class="px-4 py-4 text-sm text-gray-500">
             {{ application.mobile }}
           </td>
+
           <td class="px-4 py-4 text-sm text-gray-500">
             {{ application.email }}
           </td>
+
           <td class="px-4 py-4 text-sm text-gray-500">
             {{ application.nationality?.countryName || 'Not Entered' }}
           </td>
+
           <td class="px-4 py-4 text-sm text-gray-500">
             {{ application.favoriteCity?.cityName || 'Not Entered' }}
           </td>
 
+          <!-- STATUS -->
           <td class="px-4 py-4 whitespace-nowrap">
             <span
-              class="inline-flex px-3 py-2 text-sm font-medium rounded-full"
-              [ngClass]="getStatusClass(application.ApplicationStatus)"
+              class="inline-flex px-3 py-2 text-sm font-medium rounded-full text-yellow-500"
               *ngIf="editingApplicationId() !== application.id"
             >
-              {{ application.ApplicationStatus }}
+              {{ application.ApplicationStatus?.status || '—' }}
             </span>
 
             <div class="relative inline-block text-left">
@@ -104,11 +107,11 @@
                 class="absolute bottom-full right-0 mb-2 z-10 w-40 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 flex flex-col"
               >
                 <button
-                  *ngFor="let option of options"
-                  (click)="select(option, application)"
+                  *ngFor="let s of statuses()"
+                  (click)="select(s, application)"
                   class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
                 >
-                  {{ option }}
+                  {{ s.status }}
                 </button>
               </div>
 
@@ -124,7 +127,7 @@
 
           <td class="px-6 py-4 text-sm text-gray-500">
             <a
-              href="{{ application.resumeUrl || 'Empty' }}"
+              [href]="application.resumeUrl || '#'"
               target="_blank"
               class="text-xs font-medium text-green-500 uppercase"
             >
