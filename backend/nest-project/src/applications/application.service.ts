@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { Application } from '../database/entities/application.entity';
@@ -102,7 +106,6 @@ export class ApplicationService {
   }
 
   //find all applications
-
   findAll() {
     return this.repo.find({
       relations: [
@@ -116,7 +119,6 @@ export class ApplicationService {
   }
 
   // find one application by ID
-
   async findOne(id: number): Promise<Application> {
     const data = await this.repo.findOne({
       where: { id },
@@ -136,7 +138,7 @@ export class ApplicationService {
     return data;
   }
 
-  // update an application by ID
+  // update an application by status
   async updateApplicationStatus(applicationId: number, statusId: number) {
     const application = await this.repo.findOne({
       where: { id: applicationId },
@@ -156,5 +158,27 @@ export class ApplicationService {
     application.ApplicationStatus = status;
 
     return this.repo.save(application);
+  }
+
+  // delete only the application that status are REJECTED
+  async deleteApplicationByStatus(applicationId: number) {
+    const application = await this.repo.findOne({
+      where: { id: applicationId },
+      relations: ['ApplicationStatus'],
+    });
+
+    if (!application) {
+      throw new NotFoundException('Application not found');
+    }
+
+    if (application.ApplicationStatus?.status !== 'REJECTED') {
+      throw new BadRequestException(
+        'Only applications with REJECTED status can be deleted',
+      );
+    }
+
+    await this.repo.delete(applicationId);
+
+    return { message: 'the application deleted successfully' };
   }
 }

@@ -18,4 +18,7 @@ export declare class ApplicationService {
     findAll(): Promise<Application[]>;
     findOne(id: number): Promise<Application>;
     updateApplicationStatus(applicationId: number, statusId: number): Promise<Application>;
+    deleteApplicationByStatus(applicationId: number): Promise<{
+        message: string;
+    }>;
 }

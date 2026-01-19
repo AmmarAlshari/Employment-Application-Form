@@ -7,7 +7,10 @@ export declare class PrivateAppController {
     create(data: CreateApplicationDto): Promise<Application>;
     findAll(): Promise<Application[]>;
     findOne(id: number): Promise<Application>;
-    updateStatus(id: number, body: {
+    updateApplicationStatus(id: number, body: {
         statusId: number;
     }): Promise<Application>;
+    deleteApplication(id: number): Promise<{
+        message: string;
+    }>;
 }

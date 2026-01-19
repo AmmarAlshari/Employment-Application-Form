@@ -1,7 +1,15 @@
 import { Application } from '../database/entities/application.entity';
 import { ApplicationService } from './application.service';
 import { CreateApplicationDto } from './dtos/application.dto';
-import { Controller, Get, Post, Body, Param, Put } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Put,
+  Delete,
+} from '@nestjs/common';
 
 @Controller('ApplicationDashboard')
 export class PrivateAppController {
@@ -26,13 +34,18 @@ export class PrivateAppController {
     return this.applicationService.findOne(id);
   }
 
-  // update an application by ID
+  // update an application by status
 
   @Put(':id/status')
-  updateStatus(
+  updateApplicationStatus(
     @Param('id') id: number,
     @Body() body: { statusId: number },
   ): Promise<Application> {
     return this.applicationService.updateApplicationStatus(id, body.statusId);
+  }
+
+  @Delete(':id')
+  deleteApplication(@Param('id') id: number) {
+    return this.applicationService.deleteApplicationByStatus(id);
   }
 }

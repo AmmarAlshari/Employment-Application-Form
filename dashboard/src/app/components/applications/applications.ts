@@ -16,6 +16,7 @@ export class Application implements OnInit {
   applications = signal<any[]>([]);
   statuses = signal<any[]>([]);
   searchTerm = signal('');
+  deleteMessage = signal<string | null>(null);
 
   openApplicationId = signal<number | null>(null);
   editingApplicationId = signal<number | null>(null);
@@ -64,6 +65,7 @@ export class Application implements OnInit {
 
   // EDIT MODE
   editButton(applicationId: number) {
+    this.clearError();
     if (this.editingApplicationId() === applicationId) {
       this.editingApplicationId.set(null);
       this.openApplicationId.set(null);
@@ -110,6 +112,7 @@ export class Application implements OnInit {
 
   // CANCEL ALL CHANGES
   cancelAll() {
+    this.clearError();
     this.applications().forEach((app) => {
       const originalStatusId = this.originalStatuses.get(app.id);
       if (originalStatusId != null) {
@@ -123,5 +126,25 @@ export class Application implements OnInit {
     this.updatedIds.set(new Set());
     this.openApplicationId.set(null);
     this.editingApplicationId.set(null);
+  }
+
+  //delete application
+  onDelete(applicationId: number) {
+    this.dataService.deletApplications(applicationId).subscribe({
+      next: () => {
+        this.applications.update((apps) => apps.filter((app) => app.id !== applicationId));
+        this.editingApplicationId.set(null);
+        this.openApplicationId.set(null);
+      },
+
+      error: (err) => {
+        if (err.status === 400) {
+          this.deleteMessage.set('Only delete applications with status REJECTED');
+        }
+      },
+    });
+  }
+  clearError() {
+    this.deleteMessage.set(null);
   }
 }

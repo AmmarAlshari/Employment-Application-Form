@@ -34,7 +34,7 @@ export const SURVEY_TRANSLATIONS = {
   ar: {
     title: 'نموذج طلب توظيف - المجدوعي القابضة',
     name: 'الاسم',
-    id: 'الهوية الوطنية',
+    id: 'الهوية الوطنية / الاقامة',
     mobile: 'رقم الجوال',
     email: 'البريد الإلكتروني',
     nationality: 'الجنسية',

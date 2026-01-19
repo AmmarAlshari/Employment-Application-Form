@@ -1,68 +1,79 @@
-<div class="bg-white shadow overflow-hidden sm:rounded-md">
-  <div class="px-4 py-5 sm:px-6 flex justify-between items-center">
+<div class="bg-white shadow-sm rounded-xl overflow-hidden font-sans">
+  <!-- Header -->
+  <div class="px-6 py-5 border-b border-gray-100 flex justify-between items-center">
     <div>
-      <h3 class="text-lg leading-6 font-medium text-gray-900">Applications</h3>
-      <p class="mt-1 max-w-2xl text-sm text-gray-500">List of application submissions.</p>
+      <h3 class="text-lg font-semibold text-gray-900">Applications</h3>
+      <p class="mt-1 text-sm text-gray-500">List of application submissions</p>
     </div>
   </div>
 
-  <div class="px-4 py-3 sm:px-6">
-    <div class="flex items-center gap-3">
-      <input
-        type="text"
-        placeholder="Search applications..."
-        [ngModel]="searchTerm()"
-        (ngModelChange)="searchTerm.set($event)"
-        class="block w-90 px-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
-      />
+  <!-- Search + Actions -->
+  <div class="px-6 py-4 flex flex-wrap items-center gap-3 border-b border-gray-100">
+    <input
+      type="text"
+      placeholder="Search applications..."
+      [ngModel]="searchTerm()"
+      (ngModelChange)="searchTerm.set($event)"
+      class="w-full sm:w-72 px-3 py-2 text-sm border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+    />
 
-      <button
-        type="button"
-        class="text-gray-700 bg-gray-200 px-6 py-2 rounded-full text-sm font-medium cursor-pointer"
-        (click)="cancelAll()"
-        *ngIf="hasUnsavedChanges()"
-      >
-        Cancel
-      </button>
+    <button
+      *ngIf="hasUnsavedChanges()"
+      class="px-5 py-2 text-xs font-semibold rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300"
+      (click)="cancelAll()"
+    >
+      Cancel
+    </button>
 
-      <button
-        type="button"
-        class="text-white bg-green-700 px-6 py-2 rounded-full text-sm font-medium cursor-pointer"
-        (click)="saveAll()"
-        *ngIf="hasUnsavedChanges()"
-      >
-        Save Changes
-      </button>
-    </div>
+    <button
+      *ngIf="hasUnsavedChanges()"
+      class="px-5 py-2 text-xs font-semibold rounded-full bg-green-700 text-white hover:bg-green-800"
+      (click)="saveAll()"
+    >
+      Save Changes
+    </button>
   </div>
 
-  <div class="overflow-visible">
-    <table class="min-w-full divide-y divide-gray-200">
+  <!-- Error Message -->
+  <div
+    *ngIf="deleteMessage()"
+    class="mx-6 mt-4 flex items-start gap-3 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="h-5 w-5 mt-0.5 text-red-600"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+    >
+      <path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 14h-2v-2h2v2zm0-4h-2V6h2v6z" />
+    </svg>
+    <span>{{ deleteMessage() }}</span>
+  </div>
+
+  <!-- TABLE (horizontal scroll on small screens) -->
+  <div class="overflow-x-auto">
+    <table class="min-w-[1200px] w-full divide-y divide-gray-200 text-sm">
       <thead class="bg-gray-50">
-        <tr>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Phone</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-            Nationality
-          </th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">City</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Resume</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-            Assigned by
-          </th>
-          <th class="px-12 py-3 text-left text-xs font-medium text-gray-500 uppercase">Action</th>
+        <tr class="text-xs font-semibold uppercase tracking-wider text-gray-500">
+          <th class="px-6 py-3 text-left">ID</th>
+          <th class="px-6 py-3 text-left">Name</th>
+          <th class="px-6 py-3 text-left">Phone</th>
+          <th class="px-6 py-3 text-left">Email</th>
+          <th class="px-6 py-3 text-left">Nationality</th>
+          <th class="px-6 py-3 text-left">City</th>
+          <th class="px-6 py-3 text-left">Status</th>
+          <th class="px-6 py-3 text-left">Resume</th>
+          <th class="px-6 py-3 text-left">Assigned by</th>
+          <th class="px-10 py-3 text-left">Action</th>
         </tr>
       </thead>
 
-      <tbody class="bg-white divide-y divide-gray-200">
+      <tbody class="divide-y divide-gray-100 bg-white">
         <tr
           *ngFor="let application of filteredApplications(); let i = index"
           class="hover:bg-gray-50"
         >
-          <td class="px-7 py-4 text-sm font-medium text-gray-900">
+          <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
             {{ i + 1 }}
             <span
               *ngIf="updatedIds().has(application.id)"
@@ -72,79 +83,105 @@
             </span>
           </td>
 
-          <td class="px-4 py-4 text-sm font-medium text-gray-900">
+          <td
+            class="px-6 py-4 font-medium text-gray-900 truncate whitespace-nowrap max-w-[220px]"
+            [title]="application.name"
+          >
             {{ application.name }}
           </td>
 
-          <td class="px-4 py-4 text-sm text-gray-500">
+          <td class="px-6 py-4 text-gray-500 truncate whitespace-nowrap max-w-[150px]">
             {{ application.mobile }}
           </td>
 
-          <td class="px-4 py-4 text-sm text-gray-500">
+          <td
+            class="px-6 py-4 text-gray-500 truncate whitespace-nowrap max-w-[220px]"
+            [title]="application.email"
+          >
             {{ application.email }}
           </td>
 
-          <td class="px-4 py-4 text-sm text-gray-500">
+          <td class="px-6 py-4 text-gray-500 truncate whitespace-nowrap max-w-[160px]">
             {{ application.nationality?.countryName || 'Not Entered' }}
           </td>
 
-          <td class="px-4 py-4 text-sm text-gray-500">
+          <td class="px-6 py-4 text-gray-500 truncate whitespace-nowrap max-w-[160px]">
             {{ application.favoriteCity?.cityName || 'Not Entered' }}
           </td>
 
           <!-- STATUS -->
-          <td class="px-4 py-4 whitespace-nowrap">
+          <td class="px-6 py-4 whitespace-nowrap">
             <span
-              class="inline-flex px-3 py-2 text-sm font-medium rounded-full text-yellow-500"
               *ngIf="editingApplicationId() !== application.id"
+              class="inline-flex px-3 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800 truncate max-w-[140px]"
             >
               {{ application.ApplicationStatus?.status || '—' }}
             </span>
 
-            <div class="relative inline-block text-left">
+            <div class="relative inline-block">
               <div
                 *ngIf="openApplicationId() === application.id"
-                class="absolute bottom-full right-0 mb-2 z-10 w-40 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 flex flex-col"
+                class="absolute bottom-full right-0 mb-2 z-20 w-44 rounded-md bg-white shadow-lg ring-1 ring-black/5"
               >
                 <button
                   *ngFor="let s of statuses()"
                   (click)="select(s, application)"
-                  class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+                  class="block w-full px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-100"
                 >
                   {{ s.status }}
                 </button>
               </div>
 
               <button
-                (click)="toggle(application.id)"
-                class="inline-flex items-center justify-center rounded-xl bg-green-700 px-4 py-2 text-sm font-medium text-white"
                 *ngIf="editingApplicationId() === application.id"
+                (click)="toggle(application.id)"
+                class="ml-2 px-4 py-2 text-xs font-semibold rounded-lg bg-green-700 text-white hover:bg-green-800"
               >
                 Status
               </button>
             </div>
           </td>
 
-          <td class="px-6 py-4 text-sm text-gray-500">
+          <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
             <a
               [href]="application.resumeUrl || '#'"
               target="_blank"
-              class="text-xs font-medium text-green-500 uppercase"
+              class="text-xs font-semibold text-green-600 hover:underline"
             >
               View Resume
             </a>
           </td>
 
-          <td class="px-6 py-4 text-sm text-gray-500">none</td>
+          <td class="px-6 py-4 text-gray-500 truncate whitespace-nowrap max-w-[140px]">none</td>
 
-          <td class="px-6 py-4">
-            <button
-              type="button"
-              class="text-white bg-green-600 px-6 py-2.5 rounded-full text-sm font-medium"
-              (click)="editButton(application.id)"
-            >
-              {{ editingApplicationId() === application.id ? 'Exit' : 'Edit Status' }}
-            </button>
+          <!-- ACTIONS -->
+          <td class="px-6 py-4 whitespace-nowrap">
+            <div class="flex items-center gap-3">
+              <button
+                *ngIf="editingApplicationId() === application.id"
+                (click)="onDelete(application.id)"
+                class="flex items-center gap-1 px-3 py-2 text-xs font-semibold rounded-lg bg-red-600 text-white hover:bg-red-700"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-4 h-4"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M9 3h6a1 1 0 011 1v1h4v2H4V5h4V4a1 1 0 011-1zM6 9h12l-1 11a2 2 0 01-2 2H9a2 2 0 01-2-2L6 9z"
+                  />
+                </svg>
+                Delete
+              </button>
+
+              <button
+                (click)="editButton(application.id)"
+                class="px-5 py-2 text-xs font-semibold rounded-full bg-green-600 text-white hover:bg-green-700"
+              >
+                {{ editingApplicationId() === application.id ? 'Exit' : 'Edit' }}
+              </button>
+            </div>
           </td>
         </tr>
       </tbody>

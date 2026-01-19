@@ -136,6 +136,20 @@ let ApplicationService = class ApplicationService {
         application.ApplicationStatus = status;
         return this.repo.save(application);
     }
+    async deleteApplicationByStatus(applicationId) {
+        const application = await this.repo.findOne({
+            where: { id: applicationId },
+            relations: ['ApplicationStatus'],
+        });
+        if (!application) {
+            throw new common_1.NotFoundException('Application not found');
+        }
+        if (application.ApplicationStatus?.status !== 'REJECTED') {
+            throw new common_1.BadRequestException('Only applications with REJECTED status can be deleted');
+        }
+        await this.repo.delete(applicationId);
+        return { message: 'the application deleted successfully' };
+    }
 };
 exports.ApplicationService = ApplicationService;
 exports.ApplicationService = ApplicationService = __decorate([

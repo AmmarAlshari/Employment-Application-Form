@@ -18,8 +18,8 @@ export class DataService {
       // catchError(this.handleError)
     );
   }
-  deletApplications(): Observable<any[]> {
-    return this.http.delete<any[]>(`${this.apiUrl}/ApplicationDashboard`).pipe(
+  deletApplications(id: number): Observable<any[]> {
+    return this.http.delete<any[]>(`${this.apiUrl}/ApplicationDashboard/${id}`).pipe(
       map((response) => response),
       // catchError(this.handleError)
     );
