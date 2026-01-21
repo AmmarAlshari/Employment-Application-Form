@@ -1,28 +1,29 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
-import {
-  LookupsService,
-  City,
-  Nationality,
-  SelectedRole,
-  Qualification,
-} from '../../api/lookups.service';
+import { ReactiveFormsModule, FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { LookupsService } from '../../api/lookups.service';
 import { SURVEY_TRANSLATIONS } from '../../i18n/survey.translation';
 import { forkJoin } from 'rxjs/internal/observable/forkJoin';
 import { HttpClient } from '@angular/common/http';
 import { enviorments } from '../../../environments/environment';
+import { Router } from '@angular/router';
+import { NgxCaptchaModule } from 'ngx-captcha';
 
 @Component({
   selector: 'app-survey',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, NgxCaptchaModule],
   templateUrl: './survey.html',
 })
 export class SurveyComponent implements OnInit {
   isArabic = false;
 
-  constructor(private lookupsService: LookupsService, private http: HttpClient) {
+  constructor(
+    private lookupsService: LookupsService,
+    private http: HttpClient,
+    private router: Router,
+    private formBuilder: FormBuilder
+  ) {
     const path = window.location.pathname;
     this.isArabic = path.includes('Ar');
   }
@@ -65,12 +66,21 @@ export class SurveyComponent implements OnInit {
   fileName: string = '';
 
   surveyForm = new FormGroup({
-    name: new FormControl('', Validators.required),
-    nationalId: new FormControl(''),
+    name: new FormControl<string>('', [
+      Validators.required,
+      Validators.maxLength(100),
+      Validators.minLength(3),
+      Validators.pattern(/^[a-zA-Z\u0600-\u06FF\s-]+$/),
+    ]),
+    nationalId: new FormControl<string>('', [
+      Validators.required,
+      Validators.pattern(/^[12]\d{9}$/),
+    ]),
+
     mobile: new FormControl('', [Validators.required, Validators.pattern('^5[0-9]{8}$')]),
     email: new FormControl('', [Validators.required, Validators.email]),
-    gender: new FormControl('Male'),
     nationalityId: new FormControl<number | null>(null, Validators.required),
+    gender: new FormControl('Male'),
     qualificationId: new FormControl<number | null>(null),
     major: new FormControl(''),
     isFreshGraduate: new FormControl<boolean>(false),
@@ -78,10 +88,11 @@ export class SurveyComponent implements OnInit {
     experienceYears: new FormControl(''),
     favoriteCityId: new FormControl<number | null>(null),
     experienceLevel: new FormControl('Beginner'),
-    selectedRoleIds: new FormControl<number[]>([]),
+    selectedRoleIds: new FormControl<number[]>([], Validators.required),
     isOtherRoleSelected: new FormControl(false),
     otherRoleRemarks: new FormControl(''),
-    remarks: new FormControl(''),
+    remarks: new FormControl('', [Validators.maxLength(250)]),
+    // recaptcha: new FormControl ['', Validators.required]
   });
 
   // Helper for checkbox state
@@ -96,7 +107,6 @@ export class SurveyComponent implements OnInit {
     const maxSizeInBytes = 2 * 1024 * 1024;
     if (file) {
       if (file.size > maxSizeInBytes) {
-        alert('File size exceeds 2MB limit. Please choose a smaller file.');
         event.target.value = ''; // Reset input
         return;
       }
@@ -126,7 +136,10 @@ export class SurveyComponent implements OnInit {
   onSubmit() {
     if (!this.surveyForm.valid) {
       this.surveyForm.markAllAsTouched();
-      alert('Please fill all required fields correctly.');
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
       return;
     }
 
@@ -157,17 +170,16 @@ export class SurveyComponent implements OnInit {
       remarks: raw.remarks || undefined,
     };
 
-    console.log('the payload is here ', payload);
+    // console.log('the payload is here ', payload);
 
     this.http.post(`${enviorments.apiUrl}/applications`, payload).subscribe({
       next: (res: any) => {
-        console.log('Application created:', res);
-
+        // console.log('Application created:', res);
+         this.router.navigate(['/application-success']);
         if (this.selectedFile && res?.id) {
           this.uploadCv(res.id);
         } else {
           this.resetForm();
-          alert('Application submitted successfully!');
         }
       },
       error: (err) => {
@@ -187,7 +199,7 @@ export class SurveyComponent implements OnInit {
       next: (res) => {
         console.log('CV uploaded:', res);
         this.resetForm();
-        alert('Application submitted successfully!');
+        // alert('Application submitted successfully!');
       },
       error: (err) => {
         console.error('CV upload error:', err);

@@ -13,27 +13,38 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
       <div class="space-y-1">
-        <label class="block font-semibold text-gray-700">{{ t.name }}</label>
+        <label class="block font-semibold text-gray-700">
+          {{ t.name }} <span class="text-red-500">*</span>
+        </label>
         <input
           type="text"
           formControlName="name"
           [placeholder]="t.namePlaceholder"
           class="w-full border border-gray-300 p-1.5 rounded outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 shadow-sm"
+          [class.border-red-500]="
+            surveyForm.get('name')?.invalid && surveyForm.get('name')?.touched
+          "
         />
       </div>
       <div class="space-y-1">
-        <label class="block font-semibold text-gray-700">{{ t.id }}</label>
+        <label class="block font-semibold text-gray-700">
+          {{ t.id }} <span class="text-red-500">*</span>
+        </label>
         <input
           type="text"
           formControlName="nationalId"
           class="w-full border border-gray-300 p-1.5 rounded outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 shadow-sm"
+          [class.border-red-500]="
+            surveyForm.get('nationalId')?.invalid && surveyForm.get('nationalId')?.touched
+          "
         />
       </div>
     </div>
-
     <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
       <div class="space-y-1">
-        <label class="block font-semibold text-gray-700">{{ t.mobile }}</label>
+        <label class="block font-semibold text-gray-700">
+          {{ t.mobile }} <span class="text-red-500">*</span>
+        </label>
         <div class="flex group">
           <span
             class="bg-gray-100 border border-r-0 border-gray-300 px-3 py-1.5 text-gray-500 text-xs flex items-center"
@@ -44,16 +55,24 @@
             formControlName="mobile"
             placeholder="500000000"
             class="w-full border border-gray-300 p-1.5 rounded-r outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 shadow-sm"
+            [class.border-red-500]="
+              surveyForm.get('mobile')?.invalid && surveyForm.get('mobile')?.touched
+            "
           />
         </div>
       </div>
       <div class="space-y-1">
-        <label class="block font-semibold text-gray-700">{{ t.email }}</label>
+        <label class="block font-semibold text-gray-700">
+          {{ t.email }} <span class="text-red-500">*</span>
+        </label>
         <input
           type="email"
           formControlName="email"
           placeholder="example@mail.com"
           class="w-full border border-gray-300 p-1.5 rounded outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 shadow-sm"
+          [class.border-red-500]="
+            surveyForm.get('email')?.invalid && surveyForm.get('email')?.touched
+          "
         />
       </div>
     </div>
@@ -78,10 +97,15 @@
         </div>
       </div>
       <div class="space-y-1">
-        <label class="block font-semibold text-gray-700">{{ t.nationality }}</label>
+        <label class="block font-semibold text-gray-700">
+          {{ t.nationality }} <span class="text-red-500">*</span>
+        </label>
         <select
           formControlName="nationalityId"
           class="w-full border border-gray-300 p-1.5 rounded outline-none bg-white focus:border-blue-600 focus:ring-1 focus:ring-blue-600 shadow-sm"
+          [class.border-red-500]="
+            surveyForm.get('nationalityId')?.invalid && surveyForm.get('nationalityId')?.touched
+          "
         >
           <option *ngFor="let n of nationalities()" [ngValue]="n.id">
             {{ isArabic ? n.countryNameAr : n.countryName }}
@@ -204,9 +228,17 @@
       <label class="block font-semibold text-[#2b5a9a] border-b border-gray-200">{{
         t.rolesTitle
       }}</label>
+      <span
+        *ngIf="
+          surveyForm.get('selectedRoleIds')?.invalid && surveyForm.get('selectedRoleIds')?.touched
+        "
+        class="block text-red-500 text-xs mt-2"
+      >
+        Select at least one role
+      </span>
       <p class="text-xs text-gray-600 mb-2"></p>
       <div
-        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-3 bg-gray-50 p-4 border border-gray-200 rounded"
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-3 bg-gray-50 p-4 border rounded"
       >
         @for (role of roles(); track role.id) {
           <label
@@ -248,11 +280,12 @@
 
     <div class="border border-blue-200 rounded mt-8 overflow-hidden">
       <div class="bg-blue-50 px-4 py-2 border-b border-blue-200">
-        <h3 class="font-bold text-[#2b5a9a]">Remarks:</h3>
+        <h3 class="font-bold text-[#2b5a9a]">{{ t.remarks }}</h3>
       </div>
       <textarea
         formControlName="remarks"
         class="w-full p-2 h-24 outline-none resize-none"
+        placeholder="{{ t.remark }}"
       ></textarea>
     </div>
 
@@ -261,7 +294,6 @@
         <label class="block mb-2 text-sm font-semibold text-gray-700">
           {{ t.cvLabel }}
         </label>
-
         <div class="relative group">
           <input
             type="file"
@@ -290,9 +322,10 @@
                   />
                 </svg>
               </div>
-
               <div class="flex flex-col text-left">
-                <span class="text-xs font-medium text-gray-700">Choose a file</span>
+                <span class="text-xs font-medium text-gray-700">
+                  {{ fileName || t.chooseFile }}
+                </span>
               </div>
             </div>
           </div>
@@ -300,7 +333,6 @@
       </div>
       <button
         type="submit"
-        [disabled]="surveyForm.invalid"
         class="bg-[#1e4e8c] disabled:bg-gray-400 text-white px-8 py-2 rounded font-bold hover:bg-blue-900 transition shadow-md active:scale-95 cursor-pointer"
       >
         {{ t.submit }}

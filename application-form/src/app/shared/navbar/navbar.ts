@@ -8,6 +8,7 @@ import { RouterLink } from '@angular/router';
   styleUrl: './navbar.css',
 })
 export class NavbarComponent {
+  constructor() {}
   isHidden = false;
   private lastScrollTop = 0;
 

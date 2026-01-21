@@ -7,6 +7,7 @@ import {
   IsEnum,
   IsArray,
   IsBoolean,
+  IsString,
 } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 import { EnglishLevel } from 'src/common/enums/englishlevel.enum';
@@ -14,9 +15,12 @@ import { Gender } from 'src/common/enums/gender.enum';
 
 export class CreateApplicationDto {
   @IsNotEmpty()
+  @IsString()
   name: string;
 
   @IsNotEmpty()
+  @IsString()
+  @Length(10, 10)
   nationalId: string;
 
   @IsNotEmpty()
@@ -45,6 +49,7 @@ export class CreateApplicationDto {
   @IsInt({ each: true })
   selectedRoleIds?: number[];
 
+  @IsOptional()
   @IsEnum(EnglishLevel)
   experienceLevel: EnglishLevel;
 
