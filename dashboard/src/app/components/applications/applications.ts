@@ -4,6 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { DataService } from '../../../api/data.service';
 import { StatusService } from '../../../api/satuts.service';
 import { forkJoin } from 'rxjs';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+import { enviorments } from '../../../environments/environment';
 
 @Component({
   selector: 'app-applications',
@@ -13,13 +16,21 @@ import { forkJoin } from 'rxjs';
   styleUrl: './applications.css',
 })
 export class Application implements OnInit {
+  enviorments = enviorments;
+
+  pageSize = 10; // items per page
+
+currentPage = signal(1);
   applications = signal<any[]>([]);
   statuses = signal<any[]>([]);
+  users = signal<any[]>([]); // ✅ assignable users (HR / Admin)
+
   searchTerm = signal('');
   deleteMessage = signal<string | null>(null);
 
   openApplicationId = signal<number | null>(null);
   editingApplicationId = signal<number | null>(null);
+  openAssignId = signal<number | null>(null);
 
   // store ORIGINAL status id per application
   originalStatuses = new Map<number, number>();
@@ -36,10 +47,12 @@ export class Application implements OnInit {
     forkJoin({
       applications: this.dataService.getApplications(),
       statuses: this.statusService.getStatus(),
+      users: this.dataService.getUsers(), // ✅ fetch HR / Admin users
     }).subscribe({
       next: (res: any) => {
         this.applications.set(res.applications);
         this.statuses.set(res.statuses);
+        this.users.set(res.users);
 
         // store original status IDs
         res.applications.forEach((app: any) => {
@@ -49,6 +62,32 @@ export class Application implements OnInit {
       error: (err) => console.error(err),
     });
   }
+
+
+  totalPages = computed(() => {
+  return Math.ceil(this.filteredApplications().length / this.pageSize);
+});
+
+paginatedApplications = computed(() => {
+  const startIndex = (this.currentPage() - 1) * this.pageSize;
+  const endIndex = startIndex + this.pageSize;
+
+  return this.filteredApplications().slice(startIndex, endIndex);
+});
+
+
+nextPage() {
+  if (this.currentPage() < this.totalPages()) {
+    this.currentPage.update(p => p + 1);
+  }
+}
+
+prevPage() {
+  if (this.currentPage() > 1) {
+    this.currentPage.update(p => p - 1);
+  }
+}
+
 
   // SEARCH
   filteredApplications = computed(() => {
@@ -69,6 +108,7 @@ export class Application implements OnInit {
     if (this.editingApplicationId() === applicationId) {
       this.editingApplicationId.set(null);
       this.openApplicationId.set(null);
+      this.openAssignId.set(null);
     } else {
       this.editingApplicationId.set(applicationId);
     }
@@ -78,11 +118,25 @@ export class Application implements OnInit {
     this.openApplicationId.set(this.openApplicationId() === applicationId ? null : applicationId);
   }
 
+  toggleAssign(applicationId: number) {
+    this.openAssignId.set(this.openAssignId() === applicationId ? null : applicationId);
+  }
+
   // SELECT STATUS (keep full object)
   select(status: any, application: any) {
     application.ApplicationStatus = status;
     this.openApplicationId.set(null);
-    this.editingApplicationId.set(null);
+  }
+
+  // ASSIGN USER
+  assignUser(user: any, application: any) {
+    this.dataService.assignApplication(application.id, user.id).subscribe({
+      next: () => {
+        application.assignedBy = user; // instant UI update
+        this.openAssignId.set(null);
+      },
+      error: (err) => console.error(err),
+    });
   }
 
   // UNSAVED CHANGES CHECK
@@ -92,7 +146,7 @@ export class Application implements OnInit {
     );
   }
 
-  // SAVE ALL CHANGES
+  // SAVE ALL CHANGES (status updates)
   saveAll() {
     const changedApps = this.applications().filter(
       (app) => this.originalStatuses.get(app.id) !== app.ApplicationStatus?.id,
@@ -113,6 +167,7 @@ export class Application implements OnInit {
   // CANCEL ALL CHANGES
   cancelAll() {
     this.clearError();
+
     this.applications().forEach((app) => {
       const originalStatusId = this.originalStatuses.get(app.id);
       if (originalStatusId != null) {
@@ -126,9 +181,10 @@ export class Application implements OnInit {
     this.updatedIds.set(new Set());
     this.openApplicationId.set(null);
     this.editingApplicationId.set(null);
+    this.openAssignId.set(null);
   }
 
-  //delete application
+  // DELETE APPLICATION
   onDelete(applicationId: number) {
     this.dataService.deletApplications(applicationId).subscribe({
       next: () => {
@@ -136,7 +192,6 @@ export class Application implements OnInit {
         this.editingApplicationId.set(null);
         this.openApplicationId.set(null);
       },
-
       error: (err) => {
         if (err.status === 400) {
           this.deleteMessage.set('Only delete applications with status REJECTED');
@@ -144,7 +199,38 @@ export class Application implements OnInit {
       },
     });
   }
+
   clearError() {
     this.deleteMessage.set(null);
+  }
+
+  // EXPORT TO EXCEL
+  exportToExcel() {
+    const data = this.applications().map((app) => ({
+      Name: app.name,
+      Email: app.email,
+      Phone: app.mobile,
+      Status: app.ApplicationStatus?.status,
+      City: app.favoriteCity?.cityName,
+      Nationality: app.nationality?.countryName,
+      AssignedBy: app.assignedBy?.email || '—',
+      remark: app.remarks,
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Applications');
+
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: 'xlsx',
+      type: 'array',
+    });
+
+    const blob = new Blob([excelBuffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    });
+
+    saveAs(blob, 'applications.xlsx');
   }
 }

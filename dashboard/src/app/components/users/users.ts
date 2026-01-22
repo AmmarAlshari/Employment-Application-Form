@@ -63,4 +63,13 @@ export class Users implements OnInit {
       error: (err) => console.error(err),
     });
   }
+
+  deleteUser(id: number) {
+    this.dataService.deleteUser(id).subscribe({
+      next: () => {
+        this.users.update((users) => users.filter((user) => user.id != id));
+      },
+      error: (err) => console.error(err),
+    });
+  }
 }

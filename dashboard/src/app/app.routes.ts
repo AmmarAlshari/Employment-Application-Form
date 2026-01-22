@@ -45,7 +45,7 @@ export const routes: Routes = [
 
       {
         path: 'datatable',
-        data: { roles: ['ADMIN'] },
+        data: { roles: ['ADMIN', 'HR'] },
         children: [
           {
             path: 'cities',

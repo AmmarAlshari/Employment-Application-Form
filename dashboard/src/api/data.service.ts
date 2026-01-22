@@ -29,6 +29,11 @@ export class DataService {
       statusId,
     });
   }
+  assignApplication(applicationId: number, userId: number) {
+    return this.http.put(`${this.apiUrl}/ApplicationDashboard/${applicationId}/assign`, {
+      assignedUserId: userId,
+    });
+  }
 
   getUsers(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/dashboard/users`).pipe(
@@ -37,7 +42,13 @@ export class DataService {
     );
   }
   createUser(data: any): Observable<any[]> {
-    return this.http.post<any[]>(`${this.apiUrl}/dashboard/create/users`, data).pipe(
+    return this.http.post<any[]>(`${this.apiUrl}/dashboard/users`, data).pipe(
+      map((response) => response),
+      // catchError(this.handleError)
+    );
+  }
+  deleteUser(id: number): Observable<any[]> {
+    return this.http.delete<any[]>(`${this.apiUrl}/dashboard/${id}`).pipe(
       map((response) => response),
       // catchError(this.handleError)
     );

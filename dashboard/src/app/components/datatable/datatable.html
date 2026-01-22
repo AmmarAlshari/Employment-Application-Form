@@ -21,6 +21,7 @@
       class="flex items-center gap-2 rounded bg-blue-800 py-2.5 px-4 text-xs font-semibold text-white shadow-md hover:shadow-lg transition-all cursor-pointer whitespace-nowrap"
       type="button"
       (click)="startCreate()"
+      *ngIf=" auth.role() === 'ADMIN'"
     >
       {{ buttonTitle }}
     </button>
@@ -65,7 +66,7 @@
             <!-- View mode -->
             <ng-container *ngIf="editingId() !== row.id">
               <span class="text-sm text-slate-500">
-                {{ col.type === 'date' ? (row[col.key] | date : 'dd/MM/yyyy') : row[col.key] }}
+                {{ col.type === 'date' ? (row[col.key] | date: 'dd/MM/yyyy') : row[col.key] }}
               </span>
             </ng-container>
 
@@ -82,7 +83,7 @@
             <div class="flex items-center gap-4">
               <!-- VIEW MODE -->
               <button
-                *ngIf="editingId() !== row.id"
+                *ngIf="editingId() !== row.id && auth.role() === 'ADMIN'"
                 class="h-8 w-8 rounded-lg text-slate-700 hover:bg-slate-900/10 transition-all flex items-center justify-center"
                 (click)="startEdit(row)"
                 title="Edit"
