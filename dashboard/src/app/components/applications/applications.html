@@ -168,17 +168,27 @@
 
             <div *ngIf="editingApplicationId() === application.id" class="relative inline-block">
               <button
+                *ngIf="!application.assignedBy || application.assignedBy.email === auth.email()"
                 class="px-4 py-2 text-xs font-semibold rounded-lg bg-indigo-600 text-white hover:bg-indigo-700"
                 (click)="toggleAssign(application.id)"
               >
-                Assign
+                {{ application.assignedBy ? 'Re-assign' : 'Assign' }}
               </button>
+
+              <span
+                *ngIf="application.assignedBy && application.assignedBy.email !== auth.email()"
+                class="px-3 py-1 text-xs font-medium text-gray-400 bg-gray-100 rounded-lg"
+                title="Locked by {{ application.assignedBy.email }}"
+              >
+                {{ application.assignedBy.email }}
+              </span>
+
               <div
                 *ngIf="openAssignId() === application.id"
                 class="absolute bottom-full mb-2 z-30 w-52 rounded-md bg-white shadow-lg ring-1 ring-black/5"
               >
                 <button
-                  *ngFor="let user of users()"
+                  *ngFor="let user of filteredAssignees()"
                   (click)="assignUser(user, application)"
                   class="block w-full px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-100"
                 >
@@ -214,6 +224,7 @@
       *ngIf="filteredApplications().length > pageSize"
       class="flex items-center justify-between px-4 py-3 border-t border-slate-200"
     >
+      a
       <p class="text-sm text-slate-500">Page {{ currentPage() }} of {{ totalPages() }}</p>
 
       <div class="flex gap-2">
