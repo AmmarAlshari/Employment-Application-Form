@@ -7,4 +7,7 @@ export declare class DashboardUsersService {
     createUser(user: CreateDashboardUserDto): Promise<DashBoardUser>;
     findUserByEmail(email: string): Promise<DashBoardUser | null>;
     getUsers(): Promise<DashBoardUser[]>;
+    deleteUser(id: number): Promise<{
+        message: string;
+    }>;
 }

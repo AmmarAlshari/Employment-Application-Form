@@ -12,6 +12,7 @@ import { SelectedRole } from '../database/entities/selectedrole.entity';
 import { CreateApplicationDto } from './dtos/application.dto';
 import { Qualification } from '../database/entities/qaualification.entity';
 import { Status } from 'src/database/entities/status.entity';
+import { DashBoardUser } from 'src/database/entities/dashboardusers.entity';
 
 @Injectable()
 export class ApplicationService {
@@ -24,6 +25,8 @@ export class ApplicationService {
     private qualRepo: Repository<Qualification>,
     @InjectRepository(Status)
     private statusRepo: Repository<Status>,
+    @InjectRepository(DashBoardUser)
+    private userRepo: Repository<DashBoardUser>,
   ) {}
 
   async create(data: CreateApplicationDto) {
@@ -45,11 +48,15 @@ export class ApplicationService {
       remarks: data.remarks,
     });
 
-    const defaultStatus = await this.statusRepo.findOneBy({ status: 'NEW' });
+    let defaultStatus = await this.statusRepo.findOneBy({ status: 'NEW' });
 
     if (!defaultStatus) {
-      throw new NotFoundException('default new not found');
+      defaultStatus = await this.statusRepo.save(
+        this.statusRepo.create({ status: 'NEW' }),
+      );
     }
+
+    application.ApplicationStatus = defaultStatus;
 
     application.ApplicationStatus = defaultStatus;
 
@@ -114,28 +121,9 @@ export class ApplicationService {
         'selectedRoles',
         'qualification',
         'ApplicationStatus',
+        'assignedBy',
       ],
     });
-  }
-
-  // find one application by ID
-  async findOne(id: number): Promise<Application> {
-    const data = await this.repo.findOne({
-      where: { id },
-      relations: [
-        'favoriteCity',
-        'nationality',
-        'selectedRoles',
-        'qualification',
-        'ApplicationStatus',
-      ],
-    });
-
-    if (!data) {
-      throw new NotFoundException(`Application with ID ${id} not found`);
-    }
-
-    return data;
   }
 
   // update an application by status
@@ -164,21 +152,36 @@ export class ApplicationService {
   async deleteApplicationByStatus(applicationId: number) {
     const application = await this.repo.findOne({
       where: { id: applicationId },
-      relations: ['ApplicationStatus'],
     });
 
     if (!application) {
       throw new NotFoundException('Application not found');
     }
 
-    if (application.ApplicationStatus?.status !== 'REJECTED') {
-      throw new BadRequestException(
-        'Only applications with REJECTED status can be deleted',
-      );
-    }
-
     await this.repo.delete(applicationId);
 
     return { message: 'the application deleted successfully' };
+  }
+
+  // assign application to user
+  async assign(applicationId: number, userId: number) {
+    const application = await this.repo.findOne({
+      where: { id: applicationId },
+    });
+
+    if (!application) {
+      throw new NotFoundException('Application not found');
+    }
+
+    const user = await this.userRepo.findOne({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    application.assignedBy = user;
+    return this.repo.save(application);
   }
 }

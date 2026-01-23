@@ -5,8 +5,7 @@ import * as express from 'express';
 import { join } from 'path';
 
 async function bootstrap() {
-
-  const allowedOrigins = ['http://localhost:4200', 'http://localhost:4201']; 
+  const allowedOrigins = ['http://localhost:4200', 'http://localhost:4201'];
   const app = await NestFactory.create(AppModule, {
     cors: {
       origin: allowedOrigins,
@@ -23,7 +22,7 @@ async function bootstrap() {
     }),
   );
 
-  app.use('/storage', express.static(join(process.cwd(), 'storage')));
+  app.use('/storage', express.static(join(__dirname, '..', 'storage')));
 
   await app.listen(3000);
   console.log('Listening on http://localhost:3000');

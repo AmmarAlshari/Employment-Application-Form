@@ -5,6 +5,7 @@ import { Qualification } from './qaualification.entity';
 import { Gender } from 'src/common/enums/gender.enum';
 import { EnglishLevel } from 'src/common/enums/englishlevel.enum';
 import { Status } from './status.entity';
+import { DashBoardUser } from './dashboardusers.entity';
 export declare class Application {
     id: number;
     name: string;
@@ -27,4 +28,5 @@ export declare class Application {
     nationality?: Nationality;
     qualification?: Qualification;
     ApplicationStatus?: Status;
+    assignedBy?: DashBoardUser;
 }

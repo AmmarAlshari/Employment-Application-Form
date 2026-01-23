@@ -7,10 +7,9 @@ import { RoleService } from '../../../../api/selectedRoles.service';
   imports: [Datatable],
   template: `
     <app-datatable
-      title="Cities"
+      title="Roles"
       buttonTitle="Add Role"
-      searchTitle="Search title"
-      searchTitle="Search title"
+      searchTitle="Search Role"
       [data]="selectedRoles()"
       [columns]="columns"
       [onCreate]="createRole"

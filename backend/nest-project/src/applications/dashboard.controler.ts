@@ -1,37 +1,30 @@
+import { Roles } from 'src/roles/roles.decorator';
 import { Application } from '../database/entities/application.entity';
 import { ApplicationService } from './application.service';
-import { CreateApplicationDto } from './dtos/application.dto';
 import {
   Controller,
   Get,
-  Post,
   Body,
   Param,
   Put,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
+import { UserRoles } from 'src/common/enums/userroles.enum';
+import { JwtAuthGuard } from 'src/auth/auth.gaurd';
+import { RolesGuard } from 'src/roles/role.guard';
 
+@Roles(UserRoles.ADMIN, UserRoles.HR)
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('ApplicationDashboard')
 export class PrivateAppController {
   constructor(private readonly applicationService: ApplicationService) {}
 
-  // create a new application
-  @Post()
-  create(@Body() data: CreateApplicationDto) {
-    return this.applicationService.create(data);
-  }
-
   // get all applications
+
   @Get()
   findAll(): Promise<Application[]> {
     return this.applicationService.findAll();
-  }
-
-  // get a single application by ID
-
-  @Get(':id')
-  findOne(@Param('id') id: number): Promise<Application> {
-    return this.applicationService.findOne(id);
   }
 
   // update an application by status
@@ -47,5 +40,13 @@ export class PrivateAppController {
   @Delete(':id')
   deleteApplication(@Param('id') id: number) {
     return this.applicationService.deleteApplicationByStatus(id);
+  }
+
+  @Put(':id/assign')
+  assignApplication(
+    @Param('id') id: number,
+    @Body() body: { assignedUserId: number },
+  ) {
+    return this.applicationService.assign(id, body.assignedUserId);
   }
 }

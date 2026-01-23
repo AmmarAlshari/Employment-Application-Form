@@ -22,6 +22,7 @@ const nationality_entity_1 = require("../database/entities/nationality.entity");
 const selectedrole_entity_1 = require("../database/entities/selectedrole.entity");
 const qaualification_entity_1 = require("../database/entities/qaualification.entity");
 const status_entity_1 = require("../database/entities/status.entity");
+const dashboardusers_entity_1 = require("../database/entities/dashboardusers.entity");
 let ApplicationService = class ApplicationService {
     repo;
     cityRepo;
@@ -29,13 +30,15 @@ let ApplicationService = class ApplicationService {
     roleRepo;
     qualRepo;
     statusRepo;
-    constructor(repo, cityRepo, natRepo, roleRepo, qualRepo, statusRepo) {
+    userRepo;
+    constructor(repo, cityRepo, natRepo, roleRepo, qualRepo, statusRepo, userRepo) {
         this.repo = repo;
         this.cityRepo = cityRepo;
         this.natRepo = natRepo;
         this.roleRepo = roleRepo;
         this.qualRepo = qualRepo;
         this.statusRepo = statusRepo;
+        this.userRepo = userRepo;
     }
     async create(data) {
         console.log('Creating application with data:', data);
@@ -53,10 +56,11 @@ let ApplicationService = class ApplicationService {
             otherRoleRemarks: data.otherRoleRemarks,
             remarks: data.remarks,
         });
-        const defaultStatus = await this.statusRepo.findOneBy({ status: 'NEW' });
+        let defaultStatus = await this.statusRepo.findOneBy({ status: 'NEW' });
         if (!defaultStatus) {
-            throw new common_1.NotFoundException('default new not found');
+            defaultStatus = await this.statusRepo.save(this.statusRepo.create({ status: 'NEW' }));
         }
+        application.ApplicationStatus = defaultStatus;
         application.ApplicationStatus = defaultStatus;
         const nationality = await this.natRepo.findOneBy({
             id: data.nationalityId,
@@ -102,24 +106,9 @@ let ApplicationService = class ApplicationService {
                 'selectedRoles',
                 'qualification',
                 'ApplicationStatus',
+                'assignedBy',
             ],
         });
-    }
-    async findOne(id) {
-        const data = await this.repo.findOne({
-            where: { id },
-            relations: [
-                'favoriteCity',
-                'nationality',
-                'selectedRoles',
-                'qualification',
-                'ApplicationStatus',
-            ],
-        });
-        if (!data) {
-            throw new common_1.NotFoundException(`Application with ID ${id} not found`);
-        }
-        return data;
     }
     async updateApplicationStatus(applicationId, statusId) {
         const application = await this.repo.findOne({
@@ -139,16 +128,28 @@ let ApplicationService = class ApplicationService {
     async deleteApplicationByStatus(applicationId) {
         const application = await this.repo.findOne({
             where: { id: applicationId },
-            relations: ['ApplicationStatus'],
         });
         if (!application) {
             throw new common_1.NotFoundException('Application not found');
         }
-        if (application.ApplicationStatus?.status !== 'REJECTED') {
-            throw new common_1.BadRequestException('Only applications with REJECTED status can be deleted');
-        }
         await this.repo.delete(applicationId);
         return { message: 'the application deleted successfully' };
+    }
+    async assign(applicationId, userId) {
+        const application = await this.repo.findOne({
+            where: { id: applicationId },
+        });
+        if (!application) {
+            throw new common_1.NotFoundException('Application not found');
+        }
+        const user = await this.userRepo.findOne({
+            where: { id: userId },
+        });
+        if (!user) {
+            throw new common_1.NotFoundException('User not found');
+        }
+        application.assignedBy = user;
+        return this.repo.save(application);
     }
 };
 exports.ApplicationService = ApplicationService;
@@ -160,7 +161,9 @@ exports.ApplicationService = ApplicationService = __decorate([
     __param(3, (0, typeorm_1.InjectRepository)(selectedrole_entity_1.SelectedRole)),
     __param(4, (0, typeorm_1.InjectRepository)(qaualification_entity_1.Qualification)),
     __param(5, (0, typeorm_1.InjectRepository)(status_entity_1.Status)),
+    __param(6, (0, typeorm_1.InjectRepository)(dashboardusers_entity_1.DashBoardUser)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
+        typeorm_2.Repository,
         typeorm_2.Repository,
         typeorm_2.Repository,
         typeorm_2.Repository,

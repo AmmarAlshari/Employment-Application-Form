@@ -10,6 +10,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { UploadsService } from './upload.service';
+import { join } from 'path';
 
 const pdfFileFilter = (
   req: any,
@@ -27,9 +28,15 @@ export class UploadsController {
   @UseInterceptors(
     FileInterceptor('cv', {
       storage: diskStorage({
-        destination: 'storage/cvs',
+        destination: join(process.cwd(), 'storage/cvs'),
         filename: (req, file, cb) => {
-          const uniqueName = `${Date.now()}-${file.originalname}`;
+          const cleanName = file.originalname
+            .toLowerCase()
+            .toLowerCase()
+            .replace(/\s+/g, '-') // spaces → dashes
+            .replace(/[^a-z0-9.-]/g, ''); // remove ', ", %, etc
+          const uniqueName = `${Date.now()}-${cleanName}`;
+
           cb(null, uniqueName);
         },
       }),

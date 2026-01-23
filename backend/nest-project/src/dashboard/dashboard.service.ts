@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DashBoardUser } from 'src/database/entities/dashboardusers.entity';
 import { Repository } from 'typeorm';
@@ -13,7 +17,6 @@ export class DashboardUsersService {
   ) {}
 
   // Creating new Dashboard users
-
   async createUser(user: CreateDashboardUserDto) {
     const existingUser = await this.userRepo.findOneBy({ email: user.email });
 
@@ -40,5 +43,30 @@ export class DashboardUsersService {
 
   async getUsers(): Promise<DashBoardUser[]> {
     return this.userRepo.find();
+  }
+
+  async deleteUser(id: number) {
+    const user = await this.userRepo.findOne({
+      where: { id },
+      relations: ['assignedApplications'],
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (user.role === 'ADMIN') {
+      throw new BadRequestException('Cant deleted Admin User');
+    }
+
+    if (user.assignedApplications?.length > 0) {
+      throw new BadRequestException(
+        'Cannot delete user assigned to applications',
+      );
+    }
+
+    await this.userRepo.remove(user);
+
+    return { message: 'User Deleted' };
   }
 }

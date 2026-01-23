@@ -5,4 +5,4 @@ import { Nationality } from './entities/nationality.entity';
 import { Qualification } from './entities/qaualification.entity';
 import { DashBoardUser } from './entities/dashboardusers.entity';
 import { Status } from './entities/status.entity';
-export declare const entities: (typeof SelectedRole | typeof City | typeof Nationality | typeof Qualification | typeof Status | typeof Application | typeof DashBoardUser)[];
+export declare const entities: (typeof SelectedRole | typeof City | typeof Nationality | typeof Qualification | typeof Status | typeof DashBoardUser | typeof Application)[];

@@ -4,7 +4,7 @@ import { inject } from '@angular/core';
 function decodeToken(token: string): any | null {
   try {
     const payload = token.split('.')[1];
-    return console.log(JSON.parse(atob(payload))), JSON.parse(atob(payload));
+    return JSON.parse(atob(payload));
   } catch {
     return null;
   }
@@ -15,7 +15,7 @@ export const authGuard: CanActivateChildFn = (route) => {
 
   const token = localStorage.getItem('token');
 
-  //  No token → go to login
+  //  No token go to login
   if (!token) {
     router.navigate(['/auth/signin']);
     return false;
@@ -29,7 +29,6 @@ export const authGuard: CanActivateChildFn = (route) => {
     return false;
   }
 
-  //  (Optional but recommended) check expiration
   const now = Math.floor(Date.now() / 1000);
   if (decoded.exp && decoded.exp < now) {
     localStorage.removeItem('token');

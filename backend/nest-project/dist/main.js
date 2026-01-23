@@ -52,7 +52,7 @@ async function bootstrap() {
         transform: true,
         forbidNonWhitelisted: true,
     }));
-    app.use('/storage', express.static((0, path_1.join)(process.cwd(), 'storage')));
+    app.use('/storage', express.static((0, path_1.join)(__dirname, '..', 'storage')));
     await app.listen(3000);
     console.log('Listening on http://localhost:3000');
 }

@@ -24,6 +24,7 @@ const qualifications_service_1 = require("./qualifications/qualifications.servic
 const status_service_1 = require("./status/status.service");
 const status_controller_1 = require("./status/status.controller");
 const status_entity_1 = require("../database/entities/status.entity");
+const auth_module_1 = require("../auth/auth.module");
 let DynamicDataModule = class DynamicDataModule {
 };
 exports.DynamicDataModule = DynamicDataModule;
@@ -37,6 +38,7 @@ exports.DynamicDataModule = DynamicDataModule = __decorate([
                 selectedrole_entity_1.SelectedRole,
                 status_entity_1.Status,
             ]),
+            (0, common_1.forwardRef)(() => auth_module_1.AuthModule),
         ],
         controllers: [
             city_controller_1.CityController,

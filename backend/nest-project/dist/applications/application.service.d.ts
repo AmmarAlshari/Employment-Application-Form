@@ -6,6 +6,7 @@ import { SelectedRole } from '../database/entities/selectedrole.entity';
 import { CreateApplicationDto } from './dtos/application.dto';
 import { Qualification } from '../database/entities/qaualification.entity';
 import { Status } from 'src/database/entities/status.entity';
+import { DashBoardUser } from 'src/database/entities/dashboardusers.entity';
 export declare class ApplicationService {
     private repo;
     private cityRepo;
@@ -13,12 +14,13 @@ export declare class ApplicationService {
     private roleRepo;
     private qualRepo;
     private statusRepo;
-    constructor(repo: Repository<Application>, cityRepo: Repository<City>, natRepo: Repository<Nationality>, roleRepo: Repository<SelectedRole>, qualRepo: Repository<Qualification>, statusRepo: Repository<Status>);
+    private userRepo;
+    constructor(repo: Repository<Application>, cityRepo: Repository<City>, natRepo: Repository<Nationality>, roleRepo: Repository<SelectedRole>, qualRepo: Repository<Qualification>, statusRepo: Repository<Status>, userRepo: Repository<DashBoardUser>);
     create(data: CreateApplicationDto): Promise<Application>;
     findAll(): Promise<Application[]>;
-    findOne(id: number): Promise<Application>;
     updateApplicationStatus(applicationId: number, statusId: number): Promise<Application>;
     deleteApplicationByStatus(applicationId: number): Promise<{
         message: string;
     }>;
+    assign(applicationId: number, userId: number): Promise<Application>;
 }

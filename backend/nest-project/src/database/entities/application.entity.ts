@@ -15,6 +15,7 @@ import { Qualification } from './qaualification.entity';
 import { Gender } from 'src/common/enums/gender.enum';
 import { EnglishLevel } from 'src/common/enums/englishlevel.enum';
 import { Status } from './status.entity';
+import { DashBoardUser } from './dashboardusers.entity';
 
 @Entity('applications')
 export class Application {
@@ -100,6 +101,10 @@ export class Application {
   qualification?: Qualification;
 
   @ManyToOne(() => Status)
-  @JoinColumn({ name: 'status_id'  })
+  @JoinColumn({ name: 'status_id' })
   ApplicationStatus?: Status;
+
+  @ManyToOne(() => DashBoardUser, { nullable: true })
+  @JoinColumn({ name: 'assigned_by_id' })
+  assignedBy?: DashBoardUser;
 }

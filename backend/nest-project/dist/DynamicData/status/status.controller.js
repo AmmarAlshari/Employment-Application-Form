@@ -17,6 +17,10 @@ const common_1 = require("@nestjs/common");
 const status_service_1 = require("./status.service");
 const create_status_dto_1 = require("./dto/create-status.dto");
 const update_status_dt_1 = require("./dto/update-status.dt");
+const auth_gaurd_1 = require("../../auth/auth.gaurd");
+const role_guard_1 = require("../../roles/role.guard");
+const roles_decorator_1 = require("../../roles/roles.decorator");
+const userroles_enum_1 = require("../../common/enums/userroles.enum");
 let StatusController = class StatusController {
     statusService;
     constructor(statusService) {
@@ -43,6 +47,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], StatusController.prototype, "getAll", null);
 __decorate([
+    (0, roles_decorator_1.Roles)(userroles_enum_1.UserRoles.ADMIN),
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -50,6 +55,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], StatusController.prototype, "create", null);
 __decorate([
+    (0, roles_decorator_1.Roles)(userroles_enum_1.UserRoles.ADMIN),
     (0, common_1.Put)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
@@ -58,6 +64,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], StatusController.prototype, "update", null);
 __decorate([
+    (0, roles_decorator_1.Roles)(userroles_enum_1.UserRoles.ADMIN),
     (0, common_1.Delete)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
@@ -65,6 +72,8 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], StatusController.prototype, "remove", null);
 exports.StatusController = StatusController = __decorate([
+    (0, common_1.UseGuards)(auth_gaurd_1.JwtAuthGuard, role_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(userroles_enum_1.UserRoles.ADMIN, userroles_enum_1.UserRoles.HR),
     (0, common_1.Controller)('status'),
     __metadata("design:paramtypes", [status_service_1.StatusService])
 ], StatusController);

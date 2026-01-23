@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const platform_express_1 = require("@nestjs/platform-express");
 const multer_1 = require("multer");
 const upload_service_1 = require("./upload.service");
+const path_1 = require("path");
 const pdfFileFilter = (req, file, cb) => {
     cb(null, true);
 };
@@ -37,9 +38,14 @@ __decorate([
     (0, common_1.Post)(':id/cv'),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('cv', {
         storage: (0, multer_1.diskStorage)({
-            destination: 'storage/cvs',
+            destination: (0, path_1.join)(process.cwd(), 'storage/cvs'),
             filename: (req, file, cb) => {
-                const uniqueName = `${Date.now()}-${file.originalname}`;
+                const cleanName = file.originalname
+                    .toLowerCase()
+                    .toLowerCase()
+                    .replace(/\s+/g, '-')
+                    .replace(/[^a-z0-9.-]/g, '');
+                const uniqueName = `${Date.now()}-${cleanName}`;
                 cb(null, uniqueName);
             },
         }),

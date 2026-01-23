@@ -10,6 +10,7 @@ export declare class AuthService {
         role: import("../common/enums/userroles.enum").UserRoles;
         createdAt: Date;
         updateAt: Date;
+        assignedApplications: import("../database/entities/application.entity").Application[];
     } | null>;
     signin(email: string, password: string): Promise<{
         access_token: string;

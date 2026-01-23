@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { City } from 'src/database/entities/cities.entity';
 import { Nationality } from 'src/database/entities/nationality.entity';
@@ -15,6 +15,7 @@ import { QualificationsService } from './qualifications/qualifications.service';
 import { StatusService } from './status/status.service';
 import { StatusController } from './status/status.controller';
 import { Status } from 'src/database/entities/status.entity';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { Status } from 'src/database/entities/status.entity';
       SelectedRole,
       Status,
     ]),
+    forwardRef(() => AuthModule),
   ],
   controllers: [
     CityController,
