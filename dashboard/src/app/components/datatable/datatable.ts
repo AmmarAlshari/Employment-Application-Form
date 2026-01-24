@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-datatable',
@@ -10,6 +11,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './datatable.css',
 })
 export class Datatable {
+  constructor(public auth: AuthService) {}
   @Input() title = '';
   @Input() buttonTitle = '';
   @Input() searchTitle = '';
@@ -39,7 +41,7 @@ export class Datatable {
       keys.some((key) => {
         const value = (item as any)[key];
         return typeof value === 'string' && value.toLowerCase().includes(term);
-      })
+      }),
     );
   }
 

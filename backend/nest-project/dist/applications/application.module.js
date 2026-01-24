@@ -10,15 +10,33 @@ exports.ApplicationModule = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const application_service_1 = require("./application.service");
-const entities_1 = require("../database/entities");
 const public_controller_1 = require("./public.controller");
 const dashboard_controler_1 = require("./dashboard.controler");
+const application_entity_1 = require("../database/entities/application.entity");
+const nationality_entity_1 = require("../database/entities/nationality.entity");
+const qaualification_entity_1 = require("../database/entities/qaualification.entity");
+const selectedrole_entity_1 = require("../database/entities/selectedrole.entity");
+const status_entity_1 = require("../database/entities/status.entity");
+const cities_entity_1 = require("../database/entities/cities.entity");
+const dashboardusers_entity_1 = require("../database/entities/dashboardusers.entity");
+const auth_module_1 = require("../auth/auth.module");
 let ApplicationModule = class ApplicationModule {
 };
 exports.ApplicationModule = ApplicationModule;
 exports.ApplicationModule = ApplicationModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature(entities_1.entities)],
+        imports: [
+            typeorm_1.TypeOrmModule.forFeature([
+                application_entity_1.Application,
+                nationality_entity_1.Nationality,
+                qaualification_entity_1.Qualification,
+                selectedrole_entity_1.SelectedRole,
+                status_entity_1.Status,
+                cities_entity_1.City,
+                dashboardusers_entity_1.DashBoardUser,
+            ]),
+            (0, common_1.forwardRef)(() => auth_module_1.AuthModule),
+        ],
         controllers: [public_controller_1.PublicAppController, dashboard_controler_1.PrivateAppController],
         providers: [application_service_1.ApplicationService],
     })

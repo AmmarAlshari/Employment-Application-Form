@@ -17,7 +17,8 @@ const nationality_entity_1 = require("./nationality.entity");
 const qaualification_entity_1 = require("./qaualification.entity");
 const gender_enum_1 = require("../../common/enums/gender.enum");
 const englishlevel_enum_1 = require("../../common/enums/englishlevel.enum");
-const application_status_enum_1 = require("../../common/enums/application-status.enum");
+const status_entity_1 = require("./status.entity");
+const dashboardusers_entity_1 = require("./dashboardusers.entity");
 let Application = class Application {
     id;
     name;
@@ -35,11 +36,12 @@ let Application = class Application {
     resumeUrl;
     createdAt;
     updatedAt;
-    ApplicationStatus;
     selectedRoles;
     favoriteCity;
     nationality;
     qualification;
+    ApplicationStatus;
+    assignedBy;
 };
 exports.Application = Application;
 __decorate([
@@ -107,14 +109,6 @@ __decorate([
     __metadata("design:type", Date)
 ], Application.prototype, "updatedAt", void 0);
 __decorate([
-    (0, typeorm_1.Column)({
-        type: 'enum',
-        enum: application_status_enum_1.ApplicationStatus,
-        default: application_status_enum_1.ApplicationStatus.NEW,
-    }),
-    __metadata("design:type", String)
-], Application.prototype, "ApplicationStatus", void 0);
-__decorate([
     (0, typeorm_1.ManyToMany)(() => selectedrole_entity_1.SelectedRole),
     (0, typeorm_1.JoinTable)({
         name: 'user_selected_roles',
@@ -144,6 +138,16 @@ __decorate([
     (0, typeorm_1.JoinColumn)({ name: 'qualification_id' }),
     __metadata("design:type", qaualification_entity_1.Qualification)
 ], Application.prototype, "qualification", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => status_entity_1.Status),
+    (0, typeorm_1.JoinColumn)({ name: 'status_id' }),
+    __metadata("design:type", status_entity_1.Status)
+], Application.prototype, "ApplicationStatus", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => dashboardusers_entity_1.DashBoardUser, { nullable: true }),
+    (0, typeorm_1.JoinColumn)({ name: 'assigned_by_id' }),
+    __metadata("design:type", dashboardusers_entity_1.DashBoardUser)
+], Application.prototype, "assignedBy", void 0);
 exports.Application = Application = __decorate([
     (0, typeorm_1.Entity)('applications')
 ], Application);

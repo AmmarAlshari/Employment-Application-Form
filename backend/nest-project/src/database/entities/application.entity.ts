@@ -7,7 +7,6 @@ import {
   JoinColumn,
   ManyToOne,
   CreateDateColumn,
-  UpdateDateColumn,
 } from 'typeorm';
 import { SelectedRole } from './selectedrole.entity';
 import { City } from './cities.entity';
@@ -15,7 +14,8 @@ import { Nationality } from './nationality.entity';
 import { Qualification } from './qaualification.entity';
 import { Gender } from 'src/common/enums/gender.enum';
 import { EnglishLevel } from 'src/common/enums/englishlevel.enum';
-import { ApplicationStatus } from 'src/common/enums/application-status.enum';
+import { Status } from './status.entity';
+import { DashBoardUser } from './dashboardusers.entity';
 
 @Entity('applications')
 export class Application {
@@ -67,12 +67,12 @@ export class Application {
   @Column({ type: 'date', nullable: true })
   updatedAt: Date;
 
-  @Column({
-    type: 'enum',
-    enum: ApplicationStatus,
-    default: ApplicationStatus.NEW,
-  })
-  ApplicationStatus: ApplicationStatus;
+  // @Column({
+  //   type: 'enum',
+  //   enum: ApplicationStatus,
+  //   default: ApplicationStatus.NEW,
+  // })
+  // ApplicationStatus: ApplicationStatus;
 
   @ManyToMany(() => SelectedRole)
   @JoinTable({
@@ -99,4 +99,12 @@ export class Application {
   @ManyToOne(() => Qualification)
   @JoinColumn({ name: 'qualification_id' })
   qualification?: Qualification;
+
+  @ManyToOne(() => Status)
+  @JoinColumn({ name: 'status_id' })
+  ApplicationStatus?: Status;
+
+  @ManyToOne(() => DashBoardUser, { nullable: true })
+  @JoinColumn({ name: 'assigned_by_id' })
+  assignedBy?: DashBoardUser;
 }

@@ -1,1 +1,110 @@
-<p>testing Dashboard</p>
+<div class="min-h-screen bg-gray-50/50 p-6 font-sans antialiased">
+  <div class="mb-8 flex flex-col gap-1"></div>
+
+  <div class="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+    <div
+      class="group relative overflow-hidden rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-200 transition-all hover:shadow-md"
+    >
+      <p class="text-xs font-bold uppercase tracking-wider text-gray-400">Total Applications</p>
+      <p class="mt-2 text-3xl font-extrabold text-gray-900">{{ totalApplications() }}</p>
+      <div
+        class="absolute -bottom-2 -right-2 h-16 w-16 rounded-full bg-blue-50 transition-transform group-hover:scale-110"
+      ></div>
+    </div>
+
+    <div
+      class="group relative overflow-hidden rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-200 transition-all hover:shadow-md"
+    >
+      <p class="text-xs font-bold uppercase tracking-wider text-gray-400">Total DashbBoard Users</p>
+      <p class="mt-2 text-3xl font-extrabold text-gray-900">{{ totalUsers() }}</p>
+      <div
+        class="absolute -bottom-2 -right-2 h-16 w-16 rounded-full bg-indigo-50 transition-transform group-hover:scale-110"
+      ></div>
+    </div>
+
+    <div
+      class="group relative overflow-hidden rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-200 transition-all hover:shadow-md"
+    >
+      <p class="text-xs font-bold uppercase tracking-wider text-gray-400">Top City</p>
+      <p class="mt-2 truncate text-xl font-bold text-gray-900">{{ topCities()[0]?.city || '—' }}</p>
+      <p class="text-xs font-medium text-emerald-600">{{ topCities()[0]?.count || 0 }} entries</p>
+    </div>
+
+    <div
+      class="group relative overflow-hidden rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-200 transition-all hover:shadow-md"
+    >
+      <p class="text-xs font-bold uppercase tracking-wider text-gray-400">Top Nationality</p>
+      <p class="mt-2 truncate text-xl font-bold text-gray-900">
+        {{ topNationalities()[0]?.nationality || '—' }}
+      </p>
+      <p class="text-xs font-medium text-blue-600">
+        {{ topNationalities()[0]?.count || 0 }} entries
+      </p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 gap-8 lg:grid-cols-12">
+    <div
+      class="flex flex-col rounded-3xl bg-white p-8 shadow-sm ring-1 ring-gray-200 lg:col-span-4"
+    >
+      <div class="mb-6">
+        <h3 class="text-lg font-bold text-gray-900">Application Status</h3>
+        <p class="text-xs text-gray-500">Distribution across workflows</p>
+      </div>
+      <div class="relative flex-1">
+        <apx-chart
+          *ngIf="statusPieChart().series.length > 0"
+          [series]="statusPieChart().series"
+          [chart]="statusPieChart().chart"
+          [labels]="statusPieChart().labels"
+          [legend]="statusPieChart().legend"
+          [colors]="statusPieChart().colors"
+          [stroke]="statusPieChart().stroke"
+          [plotOptions]="statusPieChart().plotOptions"
+        ></apx-chart>
+      </div>
+    </div>
+
+    <div
+      class="flex flex-col rounded-3xl bg-white p-8 shadow-sm ring-1 ring-gray-200 lg:col-span-4"
+    >
+      <div class="mb-6">
+        <h3 class="text-lg font-bold text-gray-900">Top Cities</h3>
+        <p class="text-xs text-gray-500">Volume by city</p>
+      </div>
+      <div class="flex-1">
+        <apx-chart
+          *ngIf="cityBarChart().series[0].data.length > 0"
+          [series]="cityBarChart().series"
+          [chart]="cityBarChart().chart"
+          [xaxis]="cityBarChart().xaxis"
+          [plotOptions]="cityBarChart().plotOptions"
+          [colors]="cityBarChart().colors"
+          [dataLabels]="cityBarChart().dataLabels"
+          [grid]="cityBarChart().grid"
+        ></apx-chart>
+      </div>
+    </div>
+
+    <div
+      class="flex flex-col rounded-3xl bg-white p-8 shadow-sm ring-1 ring-gray-200 lg:col-span-4"
+    >
+      <div class="mb-6">
+        <h3 class="text-lg font-bold text-gray-900">Top Nationalities</h3>
+        <p class="text-xs text-gray-500">Volume by country</p>
+      </div>
+      <div class="flex-1">
+        <apx-chart
+          *ngIf="nationalityBarChart().series[0].data.length > 0"
+          [series]="nationalityBarChart().series"
+          [chart]="nationalityBarChart().chart"
+          [xaxis]="nationalityBarChart().xaxis"
+          [colors]="['#10b981']"
+          [plotOptions]="nationalityBarChart().plotOptions"
+          [grid]="{ show: false }"
+          [dataLabels]="{ enabled: false }"
+        ></apx-chart>
+      </div>
+    </div>
+  </div>
+</div>

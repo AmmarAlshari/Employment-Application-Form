@@ -35,10 +35,13 @@ class CreateApplicationDto {
 exports.CreateApplicationDto = CreateApplicationDto;
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateApplicationDto.prototype, "name", void 0);
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.Length)(10, 10),
     __metadata("design:type", String)
 ], CreateApplicationDto.prototype, "nationalId", void 0);
 __decorate([
@@ -74,6 +77,7 @@ __decorate([
     __metadata("design:type", Array)
 ], CreateApplicationDto.prototype, "selectedRoleIds", void 0);
 __decorate([
+    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsEnum)(englishlevel_enum_1.EnglishLevel),
     __metadata("design:type", String)
 ], CreateApplicationDto.prototype, "experienceLevel", void 0);

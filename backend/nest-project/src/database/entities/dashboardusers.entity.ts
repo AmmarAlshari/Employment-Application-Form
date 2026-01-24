@@ -2,10 +2,12 @@ import { UserRoles } from 'src/common/enums/userroles.enum';
 import {
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Column } from 'typeorm';
+import { Application } from './application.entity';
 
 @Entity('dashboard_users')
 export class DashBoardUser {
@@ -26,4 +28,8 @@ export class DashBoardUser {
 
   @UpdateDateColumn()
   updateAt: Date;
+  
+  @OneToMany(() => Application, app => app.assignedBy)
+  assignedApplications: Application[];
+
 }

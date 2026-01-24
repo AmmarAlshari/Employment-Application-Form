@@ -1,10 +1,12 @@
-<div class="relative flex h-screen w-full overflow-hidden bg-gray-50">
+<div class="flex h-screen w-full overflow-hidden bg-slate-50 font-sans">
   <div class="flex flex-1 flex-col overflow-hidden">
-    <app-navbar class="flex-none"></app-navbar>
+    <app-navbar class="flex-none z-10 shadow-sm"></app-navbar>
 
-    <main class="flex-1 overflow-y-auto p-20">
-      <router-outlet></router-outlet>
+    <main class="flex-1 overflow-y-auto bg-slate-50/50 p-6 md:p-10 custom-scrollbar">
+      <div class="mx-auto max-w-7xl">
+        <router-outlet></router-outlet>
+      </div>
     </main>
-    <app-footer></app-footer>
+    <app-footer class="flex-none border-t border-slate-200 bg-white"></app-footer>
   </div>
 </div>

@@ -13,6 +13,7 @@ exports.DashBoardUser = void 0;
 const userroles_enum_1 = require("../../common/enums/userroles.enum");
 const typeorm_1 = require("typeorm");
 const typeorm_2 = require("typeorm");
+const application_entity_1 = require("./application.entity");
 let DashBoardUser = class DashBoardUser {
     id;
     email;
@@ -20,6 +21,7 @@ let DashBoardUser = class DashBoardUser {
     role;
     createdAt;
     updateAt;
+    assignedApplications;
 };
 exports.DashBoardUser = DashBoardUser;
 __decorate([
@@ -46,6 +48,10 @@ __decorate([
     (0, typeorm_1.UpdateDateColumn)(),
     __metadata("design:type", Date)
 ], DashBoardUser.prototype, "updateAt", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => application_entity_1.Application, app => app.assignedBy),
+    __metadata("design:type", Array)
+], DashBoardUser.prototype, "assignedApplications", void 0);
 exports.DashBoardUser = DashBoardUser = __decorate([
     (0, typeorm_1.Entity)('dashboard_users')
 ], DashBoardUser);

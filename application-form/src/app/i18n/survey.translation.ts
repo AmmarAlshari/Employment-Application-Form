@@ -1,6 +1,6 @@
 export const SURVEY_TRANSLATIONS = {
   en: {
-    title: 'Employment Application Form',
+    title: 'Employment Application Form - Almajdouie Holding',
     name: 'Name',
     nationality: 'Nationality',
     id: 'National ID',
@@ -30,11 +30,14 @@ export const SURVEY_TRANSLATIONS = {
     intermediate: 'Intermediate',
     expert: 'Expert',
     cityName: 'City Name',
+    remarks: 'Remarks',
+    chooseFile: 'Choose a file',
+    remark: 'Max words 250',
   },
   ar: {
     title: 'نموذج طلب توظيف - المجدوعي القابضة',
     name: 'الاسم',
-    id: 'الهوية الوطنية',
+    id: 'الهوية الوطنية / الاقامة',
     mobile: 'رقم الجوال',
     email: 'البريد الإلكتروني',
     nationality: 'الجنسية',
@@ -62,5 +65,8 @@ export const SURVEY_TRANSLATIONS = {
     intermediate: 'متوسط',
     expert: 'خبير',
     cityName: 'اسم المدينة',
+    remarks: 'ملاحضة',
+    chooseFile: 'اختر ملف',
+    remark: 'حد اقصى للكلمات 250',
   },
 } as const;

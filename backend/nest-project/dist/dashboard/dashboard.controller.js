@@ -21,36 +21,45 @@ const userroles_enum_1 = require("../common/enums/userroles.enum");
 const role_guard_1 = require("../roles/role.guard");
 const auth_gaurd_1 = require("../auth/auth.gaurd");
 let DashboardController = class DashboardController {
-    createRepo;
-    constructor(createRepo) {
-        this.createRepo = createRepo;
+    userRepo;
+    constructor(userRepo) {
+        this.userRepo = userRepo;
     }
     createUser(dto) {
-        return this.createRepo.createUser(dto);
+        return this.userRepo.createUser(dto);
     }
     getUsers() {
-        return this.createRepo.getUsers();
+        return this.userRepo.getUsers();
+    }
+    delete(id) {
+        return this.userRepo.deleteUser(id);
     }
 };
 exports.DashboardController = DashboardController;
 __decorate([
-    (0, common_1.UseGuards)(auth_gaurd_1.JwtAuthGuard, role_guard_1.RolesGuard),
     (0, roles_decorator_1.Roles)(userroles_enum_1.UserRoles.ADMIN),
-    (0, common_1.Post)('create/users'),
+    (0, common_1.Post)('users'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_user_dto_1.CreateDashboardUserDto]),
     __metadata("design:returntype", void 0)
 ], DashboardController.prototype, "createUser", null);
 __decorate([
-    (0, common_1.UseGuards)(auth_gaurd_1.JwtAuthGuard, role_guard_1.RolesGuard),
-    (0, roles_decorator_1.Roles)(userroles_enum_1.UserRoles.ADMIN),
     (0, common_1.Get)('users'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], DashboardController.prototype, "getUsers", null);
+__decorate([
+    (0, common_1.Delete)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", void 0)
+], DashboardController.prototype, "delete", null);
 exports.DashboardController = DashboardController = __decorate([
+    (0, common_1.UseGuards)(auth_gaurd_1.JwtAuthGuard, role_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(userroles_enum_1.UserRoles.ADMIN, userroles_enum_1.UserRoles.HR),
     (0, common_1.Controller)('dashboard'),
     __metadata("design:paramtypes", [dashboard_service_1.DashboardUsersService])
 ], DashboardController);

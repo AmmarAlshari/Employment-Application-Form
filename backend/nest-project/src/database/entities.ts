@@ -4,6 +4,7 @@ import { City } from './entities/cities.entity';
 import { Nationality } from './entities/nationality.entity';
 import { Qualification } from './entities/qaualification.entity';
 import { DashBoardUser } from './entities/dashboardusers.entity';
+import { Status } from './entities/status.entity';
 
 export const entities = [
   Application,
@@ -12,4 +13,5 @@ export const entities = [
   Nationality,
   Qualification,
   DashBoardUser,
+  Status,
 ];

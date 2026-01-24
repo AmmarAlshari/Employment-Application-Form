@@ -17,6 +17,10 @@ const common_1 = require("@nestjs/common");
 const qualifications_service_1 = require("./qualifications.service");
 const create_qual_dto_1 = require("./dto/create-qual.dto");
 const update_qual_dto_1 = require("./dto/update-qual.dto");
+const roles_decorator_1 = require("../../roles/roles.decorator");
+const auth_gaurd_1 = require("../../auth/auth.gaurd");
+const role_guard_1 = require("../../roles/role.guard");
+const userroles_enum_1 = require("../../common/enums/userroles.enum");
 let QualificationsController = class QualificationsController {
     qualService;
     constructor(qualService) {
@@ -53,6 +57,8 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], QualificationsController.prototype, "getOne", null);
 __decorate([
+    (0, common_1.UseGuards)(auth_gaurd_1.JwtAuthGuard, role_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(userroles_enum_1.UserRoles.ADMIN),
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -60,6 +66,8 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], QualificationsController.prototype, "create", null);
 __decorate([
+    (0, common_1.UseGuards)(auth_gaurd_1.JwtAuthGuard, role_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(userroles_enum_1.UserRoles.ADMIN),
     (0, common_1.Put)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
@@ -68,6 +76,8 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], QualificationsController.prototype, "update", null);
 __decorate([
+    (0, common_1.UseGuards)(auth_gaurd_1.JwtAuthGuard, role_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(userroles_enum_1.UserRoles.ADMIN),
     (0, common_1.Delete)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),

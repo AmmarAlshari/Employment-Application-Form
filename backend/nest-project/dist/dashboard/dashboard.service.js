@@ -76,6 +76,23 @@ let DashboardUsersService = class DashboardUsersService {
     async getUsers() {
         return this.userRepo.find();
     }
+    async deleteUser(id) {
+        const user = await this.userRepo.findOne({
+            where: { id },
+            relations: ['assignedApplications'],
+        });
+        if (!user) {
+            throw new common_1.NotFoundException('User not found');
+        }
+        if (user.role === 'ADMIN') {
+            throw new common_1.BadRequestException('Cant deleted Admin User');
+        }
+        if (user.assignedApplications?.length > 0) {
+            throw new common_1.BadRequestException('Cannot delete user assigned to applications');
+        }
+        await this.userRepo.remove(user);
+        return { message: 'User Deleted' };
+    }
 };
 exports.DashboardUsersService = DashboardUsersService;
 exports.DashboardUsersService = DashboardUsersService = __decorate([
