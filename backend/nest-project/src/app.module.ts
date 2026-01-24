@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { DatabaseModule } from './database/database.module';
 import { ApplicationModule } from './applications/application.module';
-import { DynamicDataModule } from './dynamicdata/dynamicdata.module';
+import { DynamicDataModule } from './daynamic-data/dynamicdata.module';
 import { UploadsModule } from './uploads/upload.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';

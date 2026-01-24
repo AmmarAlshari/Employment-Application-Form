@@ -61,7 +61,6 @@ let ApplicationService = class ApplicationService {
             defaultStatus = await this.statusRepo.save(this.statusRepo.create({ status: 'NEW' }));
         }
         application.ApplicationStatus = defaultStatus;
-        application.ApplicationStatus = defaultStatus;
         const nationality = await this.natRepo.findOneBy({
             id: data.nationalityId,
         });
