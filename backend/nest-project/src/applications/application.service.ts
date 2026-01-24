@@ -58,7 +58,6 @@ export class ApplicationService {
 
     application.ApplicationStatus = defaultStatus;
 
-    application.ApplicationStatus = defaultStatus;
 
     const nationality = await this.natRepo.findOneBy({
       id: data.nationalityId,
